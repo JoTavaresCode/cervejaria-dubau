@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Du Baú | Cervejaria Artesanal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="hero" id="inicio">
+
+  <nav class="menu">
+  <div class="logo-menu"></div>
+
+  <div class="menu-toggle" onclick="toggleMenu()">
+    ☰
+  </div>
+
+  <ul id="menu-links">
+    <li><a href="index.html" onclick="toggleMenu()">Início</a></li>
+    <li><a href="cervejas.html" onclick="toggleMenu()">Cervejas</a></li>
+    <li><a href="imagens.html" onclick="toggleMenu()">Galeria</a></li>
+    <li><a href="eventos.html" onclick="toggleMenu()">Evento Cervejeiro</a></li>
+    <li><a href="mapa.html" onclick="toggleMenu()">Localização</a></li>
+  </ul>
+</nav>
+
+
+    <div class="hero-content">
+  <img src="imagens/logo1.PNG" alt="Logo Du Baú" class="logo">
+  <h1>Du Baú</h1>
+  <p>Cervejaria Artesanal</p>
+  <a href="https://wa.me/5512997410925" class="btn">Falar no WhatsApp</a>
+</div>
+
+</header>
+
+
+<section class="eventos">
+  <h2>Próximos Eventos</h2>
+  <p class="subtitulo">Música, cerveja artesanal e bons momentos</p>
+
+  <div class="eventos-grid">
+
+    <div class="evento-card imagem">
+      <img src="imagens/evento1.jpg" alt="Rock ao Vivo">
+      <div class="overlay">
+        <span class="data">18 JAN • 19h</span>
+        <h3>Rock ao Vivo</h3>
+        <p>Banda local tocando clássicos do rock.</p>
+      </div>
+    </div>
+
+    <div class="evento-card imagem">
+      <img src="imagens/evento1.JPG" alt="Noite IPA">
+      <div class="overlay">
+        <span class="data">25 JAN • 18h</span>
+        <h3>Noite IPA</h3>
+        <p>Promoção especial nas IPAs da casa.</p>
+      </div>
+    </div>
+
+    <div class="evento-card imagem">
+      <img src="imagens/evento1.JPG" alt="Festival de Chopp">
+      <div class="overlay">
+        <span class="data">02 FEV • 16h</span>
+        <h3>Festival de Chopp</h3>
+        <p>Vários estilos, música e gastronomia.</p>
+      </div>
+    </div>
+
+  </div>
+</section>

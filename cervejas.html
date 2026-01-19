@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cardápio | Du Baú Cervejaria</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="hero hero-interno">
+  <nav class="menu">
+    <div class="logo-menu">Du Baú</div>
+
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
+    <ul id="menu-links">
+      <li><a href="index.html">Início</a></li>
+      <li><a href="cardapio.html">Cardápio</a></li>
+      <li><a href="index.html#contato">Contato</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero-content">
+    <h1>Cardápio de Cervejas</h1>
+    <p>Nossos estilos artesanais</p>
+  </div>
+</header>
+
+<section class="cardapio">
+  <div class="cerveja">
+    <h3>Pilsen</h3>
+    <p class="estilo">Leve • Refrescante</p>
+    <p class="descricao">Cerveja clara, equilibrada e fácil de beber.</p>
+    <span class="preco">R$ 12,00</span>
+  </div>
+
+  <div class="cerveja">
+    <h3>IPA</h3>
+    <p class="estilo">Amarga • Cítrica</p>
+    <p class="descricao">Aromas intensos de lúpulo e final marcante.</p>
+    <span class="preco">R$ 15,00</span>
+  </div>
+
+  <div class="cerveja">
+    <h3>Stout</h3>
+    <p class="estilo">Escura • Encorpada</p>
+    <p class="descricao">Notas de café e chocolate.</p>
+    <span class="preco">R$ 16,00</span>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 Du Baú Cervejaria Artesanal</p>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById("menu-links");
+    menu.classList.toggle("active");
+  }
+</script>
+
+</body>
+</html>
