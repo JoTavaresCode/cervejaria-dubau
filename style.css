@@ -680,3 +680,190 @@ h1, h2, h3 {
   text-align: center;
   color: #fff;
 }
+/* ===== SLIDER ===== */
+
+.slider {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.slides {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+/* Conteúdo sobre o slide */
+/* ===== SLIDER HERO ===== */
+
+.hero-slider {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.hero-slider .slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  animation: slideShow 15s infinite;
+  opacity: 0;
+}
+
+.hero-slider .s1 {
+  background-image: url("imagens/slide1.jpg");
+  animation-delay: 0s;
+}
+
+.hero-slider .s2 {
+  background-image: url("imagens/slide2.jpg");
+  animation-delay: 5s;
+}
+
+.hero-slider .s3 {
+  background-image: url("imagens/slide3.jpg");
+  animation-delay: 10s;
+}
+
+@keyframes slideShow {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  30% { opacity: 1; }
+  40% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* Conteúdo */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-content .logo {
+  width: 140px;
+  margin-bottom: 20px;
+}
+
+.hero-content h1 {
+  font-size: 60px;
+  font-family: 'Playfair Display', serif;
+}
+
+.hero-content p {
+  font-size: 22px;
+  margin-bottom: 25px;
+}
+
+.hero-content .btn {
+  background: #c99b2b;
+  padding: 14px 30px;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 30px;
+  font-weight: bold;
+}
+<!--slider--fotos-->
+
+.slider {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+.slider::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+}
+
+.slider-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #fff;
+}
+/* ===== CTA / SOCIAL ===== */
+
+.cta-social {
+  background: #222;
+  color: #fff;
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.cta-social h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.cta-social p {
+  font-size: 18px;
+  color: #ccc;
+  margin-bottom: 30px;
+}
+
+/* Botão Instagram */
+.btn-instagram {
+  display: inline-block;
+  background: #c99b2b;
+  color: #000;
+  padding: 14px 36px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-instagram:hover {
+  background: #e2b94b;
+  transform: translateY(-3px);
+}
