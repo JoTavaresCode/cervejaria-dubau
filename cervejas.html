@@ -11,85 +11,123 @@
 <body>
 
 <header class="hero" id="inicio">
-<div class="slider">
-
-  <div class="slide active" style="background-image: url('imagens/slide1.jpg');"></div>
-  <div class="slide" style="background-image: url('imagens/slide3.JPG');"></div>
-  <div class="slide" style="background-image: url('imagens/slide1.jpg');"></div>
-
-  <div class="slider-content">
-    <img src="imagens/logo1.PNG" alt="Logo Du Baú" class="logo">
-    <h1>Du Baú</h1>
-    <p>Cervejaria Artesanal</p>
-    <a href="https://wa.me/5512997410925" class="btn">Falar no WhatsApp</a>
-  </div>
-
-
 
   <nav class="menu">
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
 
+    <ul id="menu-links">
+      <li><a href="index.html">Início</a></li>
+      <li><a href="cervejas.html">Cervejas</a></li>
+      <li><a href="eventos.html">Evento Cervejeiro</a></li>
+    </ul>
+  </nav>
 
-  <div class="logo-menu"></div>
+  <div class="slider">
+    <div class="slide active" style="background-image: url('imagens/slide1.jpg');"></div>
+    <div class="slide" style="background-image: url('imagens/slide3.JPG');"></div>
+    <div class="slide" style="background-image: url('imagens/slide1.jpg');"></div>
 
-  <div class="menu-toggle" onclick="toggleMenu()">
-    ☰
+    <div class="slider-content">
+      <img src="imagens/logo1.PNG" alt="Logo Du Baú" class="logo">
+      <h1>Du Baú</h1>
+      <p>Cervejaria Artesanal</p>
+      <a href="https://wa.me/5512997410925" class="btn">Falar no WhatsApp</a>
+    </div>
   </div>
-
-  <ul id="menu-links">
-    <li><a href="index.html" onclick="toggleMenu()">Início</a></li>
-    <li><a href="cervejas.html" onclick="toggleMenu()">Cervejas</a></li>
-    <li><a href="imagens.html" onclick="toggleMenu()">Galeria</a></li>
-    <li><a href="eventos.html" onclick="toggleMenu()">Evento Cervejeiro</a></li>
-    <li><a href="mapa.html" onclick="toggleMenu()">Localização</a></li>
-  </ul>
-</nav>
-
-
-    <div class="hero-content">
-  <img src="imagens/logo1.PNG" alt="Logo Du Baú" class="logo">
-  <h1>Du Baú</h1>
-  <p>Cervejaria Artesanal</p>
-  <a href="https://wa.me/5512997410925" class="btn">Falar no WhatsApp</a>
-</div>
-
-
-</div>
-
 
 </header>
-<section class="cardapio">
-  <div class="cerveja">
-    <h3>Pilsen</h3>
-    <p class="estilo">Leve • Refrescante</p>
-    <p class="descricao">Cerveja clara, equilibrada e fácil de beber.</p>
-    <span class="preco">R$ 12,00</span>
-  </div>
 
-  <div class="cerveja">
-    <h3>IPA</h3>
-    <p class="estilo">Amarga • Cítrica</p>
-    <p class="descricao">Aromas intensos de lúpulo e final marcante.</p>
-    <span class="preco">R$ 15,00</span>
-  </div>
 
-  <div class="cerveja">
-    <h3>Stout</h3>
-    <p class="estilo">Escura • Encorpada</p>
-    <p class="descricao">Notas de café e chocolate.</p>
-    <span class="preco">R$ 16,00</span>
+<section class="eventos">
+  <h2>Eventos Dú Baú</h2>
+  <p class="eventos-sub">
+    Música, encontros e boas cervejas
+  </p>
+
+  <div class="eventos-grid">
+
+    <div class="evento-card">
+      <img src="imagens/evento1.jpg" alt="Música ao vivo">
+      <div class="evento-info">
+        <h3>Música ao Vivo</h3>
+        <p>Sexta-feira • 20h</p>
+        <span>Rock & Blues</span>
+      </div>
+    </div>
+
+    <div class="evento-card">
+      <img src="imagens/evento2.jpg" alt="Degustação de cervejas">
+      <div class="evento-info">
+        <h3>Degustação Guiada</h3>
+        <p>Sábado • 18h</p>
+        <span>Cervejas Artesanais</span>
+      </div>
+    </div>
+
+    <div class="evento-card">
+      <img src="imagens/evento3.jpg" alt="Evento especial">
+      <div class="evento-info">
+        <h3>Noite Especial</h3>
+        <p>Domingo • 17h</p>
+        <span>Food + Chopp</span>
+      </div>
+    </div>
+
   </div>
 </section>
+
+   
+
+
+
+
+
+
+
+
+
+
+<!-- CTA / SOCIAL COM IMAGEM-->
+<section class="cta-social">
+  <div class="cta-overlay"></div>
+
+ 
+    <div class="cta-content animar">
+
+    <h2>Venha conhecer</h2>
+    <p>São Bento do Sapucaí – SP</p>
+
+    <a href="https://www.instagram.com/dubaucervejariaartesanal"
+       target="_blank"
+       class="btn btn-instagram">
+      Instagram
+      <img src="imagens/instagram-icon.png" alt="Instagram Icon">
+      <!--trazer imagem png de Instagram  -->
+    </a>
+  </div>
+</section>
+
 
 <footer>
   <p>© 2025 Du Baú Cervejaria Artesanal</p>
 </footer>
-
+<!-- JavaScript for Menu Toggle -->
 <script>
   function toggleMenu() {
     const menu = document.getElementById("menu-links");
     menu.classList.toggle("active");
   }
+
+  let slides = document.querySelectorAll(".slide");
+  let index = 0;
+
+  setInterval(() => {
+    slides[index].classList.remove("active");
+    index = (index + 1) % slides.length;
+    slides[index].classList.add("active");
+  }, 4000);
 </script>
+
 
 </body>
 </html>
