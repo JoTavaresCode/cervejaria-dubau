@@ -2,156 +2,105 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Du Baú | Cervejaria Artesanal</title>
+  <title>Dù Baú Cervejaria Artesanal em São Bento do Sapucaí | Chopp Artesanal</title>
+  <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A Dù Baú é uma cervejaria artesanal em São Bento do Sapucaí – SP, com chopp artesanal, espaço acolhedor, eventos cervejeiros e atendimento via WhatsApp.">
+
+  <!-- Fontes -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css">
+
 </head>
 <body>
 
 <header class="hero" id="inicio">
-<div class="slider">
-
-  <div class="slide active" style="background-image: url('imagens/slide1.jpg');"></div>
-  <div class="slide" style="background-image: url('imagens/slide3.JPG');"></div>
-  <div class="slide" style="background-image: url('imagens/slide1.jpg');"></div>
-
-  <div class="slider-content">
-    <img src="imagens/logo1.PNG" alt="Logo Du Baú" class="logo">
-    <h1></h1>
-    <p>Cervejaria Artesanal</p>
-    <a href="https://wa.me/5512997410925" class="btn">Falar no WhatsApp</a>
-  </div>
-
-
-
   <nav class="menu">
+    <div></div>
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    <ul id="menu-links">
+      <li><a href="inicio.html">Início</a></li>
+      <li><a href="cervejas.html">Cervejas</a></li>
+      <li><a href="eventos.html">Eventos</a></li>
+      <li><a href="loja.html">Loja</a></li>
+    </ul>
+  </nav>
 
-
-  <div class="logo-menu"></div>
-
-  <div class="menu-toggle" onclick="toggleMenu()">
-    ☰
-  </div>
-
-  <ul id="menu-links">
-    <li><a href="index.html" onclick="toggleMenu()">Início</a></li>
-    <li><a href="cervejas.html" onclick="toggleMenu()">Cervejas</a></li>
-    <li><a href="imagens.html" onclick="toggleMenu()">Galeria</a></li>
-    <li><a href="eventos.html" onclick="toggleMenu()">Evento Cervejeiro</a></li>
-    <li><a href="mapa.html" onclick="toggleMenu()">Localização</a></li>
-  </ul>
-</nav>
-
+  <div class="slider">
+    <div class="slide active" style="background-image:url('imagens/cervejas/foto4.jpg')"></div>
+    <div class="slide" style="background-image:url('imagens/cervejas/foto7.JPG')"></div>
+    <div class="slide" style="background-image:url('imagens/espaco/8torneiras.jpg')"></div>
 
     <div class="hero-content">
-  <img src="imagens/logo1.PNG" alt="Logo Du Baú" class="logo">
-  <h1>Du Baú</h1>
-  <p>Cervejaria Artesanal</p>
-  <a href="https://wa.me/5512997410925" class="btn">Falar no WhatsApp</a>
-</div>
-
-
-</div>
-
-
+      <img src="imagens/logo1.PNG" class="logo" alt="Logo Cervejaria Du Baú em São Bento do Sapucaí-SP">
+      <h1>Dù Baú</h1>
+      <p>Cervejaria Artesanal</p>
+      <a href="https://wa.me/5512997410925" class="btn">Falar no WhatsApp</a>
+    </div>
+  </div>
 </header>
 
 <section class="sobre" id="sobre">
-
+  <h1>Bem-vindo à Dù Baú</h1>
   <h2>Sobre a Cervejaria</h2>
-  <p>
-    A <strong>Du Baú</strong> é a primeira cervejaria do Vale do Baú,
-    produzindo cervejas artesanais desde 2021.
-  </p>
+  <p>A <strong>Dù Baú</strong> é a primeira cervejaria do Vale do Baú, criada para valorizar a cultura cervejeira com receitas artesanais, ingredientes locais e experiências únicas.</p>
 </section>
 
 <section class="info">
-  <div class="info-card">
-    <h3>🍺 Chopp</h3>
-    <p>8 torneiras de chopp artesanal</p>
-  </div>
-
-  <div class="info-card">
-    <h3>🕒 Horário</h3>
-    <p>Qua a Dom<br>12h às 21h</p>
-  </div>
-
-  <div class="info-card">
-    <h3>🐶 Pet Friendly</h3>
-    <p>Seu pet é bem-vindo</p>
-  </div>
+  <div class="info-card"><h3>🍺 Chopp</h3><p>10 torneiras artesanais</p></div>
+  <div class="info-card"><h3>🕒 Horário</h3><p>Qua a Seg<br>12h às 21h</p></div>
+  <div class="info-card"><h3>🐶 Pet Friendly</h3><p>Seu pet é bem-vindo</p></div>
 </section>
 
 <section class="galeria">
   <h2>Nosso Espaço</h2>
   <div class="fotos">
-    <img src="imagens/foto1.jpg" alt="Cervejaria Du Baú">
-    <img src="imagens/foto2.jpg" alt="Chopp artesanal">
-    <img src="imagens/foto3.jpg" alt="Ambiente da cervejaria">
+    <img src="imagens/espaco4.jpeg" alt="Cervejaria">
+    <img src="imagens/espaco/8torneiras.jpg" alt="Chopp">
+    <img src="imagens/espaco/espaco2 - Copia.jpeg" alt="Ambiente">
   </div>
 </section>
 
-
-<!-- Mapa Section -->   
+<section class="video-section">
+  <div class="video-container">
+    <video controls poster="imagens/pessoas/pessoas1.jpeg">
+      <source src="imagens/videos/video8.mp4" type="video/mp4">
+    </video>
+  </div>
+</section>
 
 <section class="mapa" id="mapa">
-
   <h2>Como chegar</h2>
-
- <iframe class="mapa-google"
-  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3680.603463409056!2d-45.6407583246956!3d-22.705800979397107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cc7d4d94d98e47%3A0x372bcac89d9a52ea!2sD%C3%B9%20Ba%C3%BA%20Cervejaria%20Artesanal!5e0!3m2!1spt-BR!2sbr!4v1768957594278!5m2!1spt-BR!2sbr"
-  width="100%" 
-  height="450" 
-  allowfullscreen="" 
-  loading="lazy">
-</iframe>
-
-
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3680.603463409056!2d-45.6407583246956!3d-22.705800979397107" 
+  width="100%" height="450" loading="lazy"></iframe>
 </section>
 
-<!-- CTA / SOCIAL COM IMAGEM-->
 <section class="cta-social">
   <div class="cta-overlay"></div>
-
- 
-    <div class="cta-content animar">
-
+  <div class="cta-content">
     <h2>Venha conhecer</h2>
     <p>São Bento do Sapucaí – SP</p>
-
-    <a href="https://www.instagram.com/dubaucervejariaartesanal"
-       target="_blank"
-       class="btn btn-instagram">
-      Instagram
-      <img src="imagens/instagram-icon.png" alt="Instagram Icon">
-      <!--trazer imagem png de Instagram  -->
-    </a>
+    <a href="https://www.instagram.com/dubaucervejariaartesanal" target="_blank" class="btn btn-instagram">Instagram</a>
   </div>
 </section>
-
 
 <footer>
   <p>© 2025 Du Baú Cervejaria Artesanal</p>
 </footer>
-<!-- JavaScript for Menu Toggle -->
+
 <script>
   function toggleMenu() {
-    const menu = document.getElementById("menu-links");
-    menu.classList.toggle("active");
+    document.getElementById('menu-links').classList.toggle('active');
   }
 
-  let slides = document.querySelectorAll(".slide");
+  const slides = document.querySelectorAll('.slide');
   let index = 0;
-
   setInterval(() => {
-    slides[index].classList.remove("active");
+    slides[index].classList.remove('active');
     index = (index + 1) % slides.length;
-    slides[index].classList.add("active");
+    slides[index].classList.add('active');
   }, 4000);
 </script>
-
 
 </body>
 </html>

@@ -11,86 +11,138 @@
 <body>
 
 <header class="hero" id="inicio">
-<div class="slider">
 
-  <div class="slide active" style="background-image: url('imagens/slide1.jpg');"></div>
-  <div class="slide" style="background-image: url('imagens/slide3.JPG');"></div>
-  <div class="slide" style="background-image: url('imagens/slide1.jpg');"></div>
-
-  <div class="slider-content">
-    <img src="imagens/logo1.PNG" alt="Logo Du Baú" class="logo">
-    <h1>Du Baú</h1>
-    <p>Cervejaria Artesanal</p>
-    <a href="https://wa.me/5512997410925" class="btn">Falar no WhatsApp</a>
-  </div>
-
-
-
+  <!-- MENU -->
   <nav class="menu">
+    <div class="logo-menu"></div>
 
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
 
-  <div class="logo-menu"></div>
+    <ul id="menu-links">
+      <li><a href="index.html" onclick="toggleMenu()">Início</a></li>
+      <li><a href="cervejas.html" onclick="toggleMenu()">Cervejas</a></li>
+      <li><a href="eventos.html" onclick="toggleMenu()">Evento Cervejeiro</a></li>
+      <li><a href="loja.html" onclick="toggleMenu()">Loja</a></li>
+    </ul>
+  </nav>
 
-  <div class="menu-toggle" onclick="toggleMenu()">
-    ☰
-  </div>
-
-  <ul id="menu-links">
-    <li><a href="index.html" onclick="toggleMenu()">Início</a></li>
-    <li><a href="cervejas.html" onclick="toggleMenu()">Cervejas</a></li>
-    <li><a href="imagens.html" onclick="toggleMenu()">Galeria</a></li>
-    <li><a href="eventos.html" onclick="toggleMenu()">Evento Cervejeiro</a></li>
-    <li><a href="mapa.html" onclick="toggleMenu()">Localização</a></li>
-  </ul>
-</nav>
-
-
+  <!-- SLIDER -->
+  <div class="slider">
+    <div class="slide active" style="background-image: url('imagens/cervejas/cerveja3.jpeg');"></div>
+    <div class="slide" style="background-image: url('imagens/cervejas/foto7.JPG');"></div>
+    <div class="slide" style="background-image: url('imagens/cervejas/foto8.jpg');"></div>
+    <div class="slide" style="background-image: url('imagens/espaco/8torneiras.jpg');"></div>
+    <!-- CONTEÚDO CENTRAL -->
     <div class="hero-content">
-  <img src="imagens/logo1.PNG" alt="Logo Du Baú" class="logo">
-  <h1>Du Baú</h1>
-  <p>Cervejaria Artesanal</p>
-  <a href="https://wa.me/5512997410925" class="btn">Falar no WhatsApp</a>
-</div>
-
-
-</div>
-
-
+      <img src="imagens/.PNG" alt="Logo Du Baú" class="logo">
+      <h1>Dù Baú</h1>
+      <p>Cervejaria Artesanal</p>
+      <a href="https://wa.me/5512997410925" class="btn">Falar no WhatsApp</a>
+    </div>
+  </div>
+  
 </header>
-
-
+<!-- ================= EVENTOS ================= -->
 <section class="eventos">
-  <h2>Próximos Eventos</h2>
-  <p class="subtitulo">Música, cerveja artesanal e bons momentos</p>
+  <h1>Nossa Programação</h1>
+  
+  <div class="programacao-card">
+  <div class="programacao-content">
+    <h3>Brincadeiras</h3>
+    <p>Torre de Chopp</p>
+    <span>📅 Todas as sextas</span>
+  </div>
+</div>
 
-  <div class="eventos-grid">
+  <div class="cards-grid">
 
-    <div class="evento-card imagem">
-      <img src="imagens/evento1.jpg" alt="Rock ao Vivo">
-      <div class="overlay">
-        <span class="data">18 JAN • 19h</span>
-        <h3>Rock ao Vivo</h3>
-        <p>Banda local tocando clássicos do rock.</p>
+    <div class="card">
+      <div class="card-image">
+        <img src="imagens/foto7.JPG" alt="Música ao Vivo">
       </div>
-    </div>
-
-    <div class="evento-card imagem">
-      <img src="imagens/evento1.JPG" alt="Noite IPA">
-      <div class="overlay">
-        <span class="data">25 JAN • 18h</span>
-        <h3>Noite IPA</h3>
-        <p>Promoção especial nas IPAs da casa.</p>
+      <div class="card-overlay">
+        <h3>Brincadeiras</h3>
+        <p>Torre de Chopp</p>
+        <span class="card-meta">📅 Todas as sextas</span>
       </div>
-    </div>
 
-    <div class="evento-card imagem">
-      <img src="imagens/evento1.JPG" alt="Festival de Chopp">
-      <div class="overlay">
-        <span class="data">02 FEV • 16h</span>
-        <h3>Festival de Chopp</h3>
-        <p>Vários estilos, música e gastronomia.</p>
-      </div>
+      
     </div>
 
   </div>
 </section>
+
+<section class="eventos">
+  
+  <div class="cards-grid">
+
+    <div class="card">
+      <div class="card-image">
+        <img src="imagens/foto8.jpg" alt="Música ao Vivo">
+      </div>
+      <div class="card-overlay">
+        <h3>Música ao Vivo</h3>
+        <p>Bandas locais em clima descontraído</p>
+        <span class="card-meta">📅 Todas as sextas</span>
+      </div>
+
+      <div class="cards-grid">
+
+    <div class="card">
+      <div class="card-image">
+        <img src="imagens/foto8.jpg" alt="Música ao Vivo">
+      </div>
+      <div class="card-overlay">
+        <h3>Música ao Vivo</h3>
+        <p>Bandas locais em clima descontraído</p>
+        <span class="card-meta">📅 Todas as sextas</span>
+      </div>
+
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= CTA FINAL ================= -->
+<section class="cta-social">
+
+  <div class="cta-overlay"></div>
+
+  <div class="cta-content animar">
+    <h2>Venha viver essa experiência</h2>
+    <p>São Bento do Sapucaí – SP</p>
+
+    <a href="https://www.instagram.com/dubaucervejariaartesanal"
+       target="_blank"
+       class="btn btn-instagram">
+      Instagram
+      
+    </a>
+  </div>
+
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <p>© 2025 Du Baú Cervejaria Artesanal</p>
+</footer>
+
+<!-- ================= JS ================= -->
+<script>
+  function toggleMenu() {
+    document.getElementById("menu-links").classList.toggle("active");
+  }
+
+  let slides = document.querySelectorAll(".slide");
+  let index = 0;
+
+  setInterval(() => {
+    slides[index].classList.remove("active");
+    index = (index + 1) % slides.length;
+    slides[index].classList.add("active");
+  }, 4000);
+</script>
+
+</body>
+</html>
