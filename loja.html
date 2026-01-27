@@ -21,7 +21,7 @@
     <ul id="menu-links">
       <li><a href="index.html" onclick="toggleMenu()">Início</a></li>
       <li><a href="cervejas.html" onclick="toggleMenu()">Cervejas</a></li>
-      <li><a href="eventos.html" onclick="toggleMenu()">Evento Cervejeiro</a></li>
+      <li><a href="eventos.html" onclick="toggleMenu()">Eventos</a></li>
       <li><a href="loja.html" onclick="toggleMenu()">Loja</a></li>
     </ul>
   </nav>
@@ -43,7 +43,341 @@
   </div>
 
 </header>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Loja | Du Baú Cervejaria</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Fontes elegantes -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --fundo: #f7f6f3;
+      --card: #ffffff;
+      --dourado: #c9a24d;
+      --dourado-claro: #e2c77a;
+      --texto: #2b2b2b;
+      --cinza: #777777;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--fundo);
+      color: var(--texto);
+    }
+
+    /* SEÇÃO DA LOJA */
+    .loja-section {
+      padding: 80px 20px;
+    }
+
+    .loja-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .loja-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.6rem;
+      letter-spacing: 2px;
+    }
+
+    .loja-header p {
+      margin-top: 12px;
+      color: var(--cinza);
+    }
+
+    /* GRID 3x3 */
+    .loja-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+    }
+
+    /* CARD DO PRODUTO */
+    .produto {
+      background: var(--card);
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      border: 1.5px solid var(--dourado);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .produto:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(201,162,77,0.25);
+    }
+
+    /* IMAGEM / PLACEHOLDER */
+    .produto-imagem {
+      aspect-ratio: 1 / 1;
+      background: linear-gradient(135deg, #f1f1f1, #e6e6e6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      font-size: 0.9rem;
+      position: relative;
+    }
+
+    /* OVERLAY NO HOVER */
+    .produto-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.85);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .produto:hover .produto-overlay {
+      opacity: 1;
+    }
+
+    .produto-overlay h3 {
+      font-family: 'Playfair Display', serif;
+      color: var(--dourado);
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+    }
+
+    .produto-overlay span {
+      color: var(--cinza);
+      font-size: 0.95rem;
+    }
+
+    /* INFORMAÇÕES */
+    .produto-info {
+      padding: 25px;
+      text-align: center;
+    }
+
+    .preco {
+      color: var(--dourado);
+      margin-bottom: 18px;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    /* BOTÃO WHATSAPP */
+    .btn-whatsapp {
+      display: inline-block;
+      padding: 10px 28px;
+      border: 1.5px solid var(--dourado);
+      border-radius: 30px;
+      color: var(--dourado);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-whatsapp:hover {
+      background: var(--dourado);
+      color: #ffffff;
+    }
+
+    /* RESPONSIVO */
+    @media (max-width: 900px) {
+      .loja-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 500px) {
+      .loja-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<section class="loja-section" id="loja">
+
+  <div class="loja-header">
+    <h1>Nossas Cervejas</h1>
+    <p>Pedidos realizados exclusivamente via WhatsApp</p>
+  </div>
+
+  <div class="loja-grid">
+
+    <!-- PRODUTO 1 -->
+    <div class="produto">
+      <div class="produto-imagem">
+        Imagem em breve
+        <div class="produto-overlay">
+          <h3>IPA Artesanal</h3>
+          <span>600ml</span>
+        </div>
+      </div>
+      <div class="produto-info">
+        <div class="preco">R$ 22,00</div>
+        <a href="https://wa.me/5512997410925" target="_blank" class="btn-whatsapp">Pedir no WhatsApp</a>
+      </div>
+    </div>
+<!-- PRODUTO 2 -->
+    <div class="produto">
+      <div class="produto-imagem">
+        Imagem em breve
+        <div class="produto-overlay">
+          <h3>IPA Artesanal</h3>
+          <span>600ml</span>
+        </div>
+      </div>
+      <div class="produto-info">
+        <div class="preco">R$ 22,00</div>
+        <a href="https://wa.me/5512997410925" target="_blank" class="btn-whatsapp">Pedir no WhatsApp</a>
+      </div>
+    </div>
+
+    <!-- PRODUTO 3 -->
+    <div class="produto">
+      <div class="produto-imagem">
+        Imagem em breve
+        <div class="produto-overlay">
+          <h3>IPA Artesanal</h3>
+          <span>600ml</span>
+        </div>
+      </div>
+      <div class="produto-info">
+        <div class="preco">R$ 22,00</div>
+        <a href="https://wa.me/5512997410925" target="_blank" class="btn-whatsapp">Pedir no WhatsApp</a>
+      </div>
+    </div>
+
+    <!-- PRODUTO 4 -->
+    <div class="produto">
+      <div class="produto-imagem">
+        Imagem em breve
+        <div class="produto-overlay">
+          <h3>IPA Artesanal</h3>
+          <span>600ml</span>
+        </div>
+      </div>
+      <div class="produto-info">
+        <div class="preco">R$ 22,00</div>
+        <a href="https://wa.me/5512997410925" target="_blank" class="btn-whatsapp">Pedir no WhatsApp</a>
+      </div>
+    </div>
+
+    <!-- PRODUTO 5 -->
+    <div class="produto">
+      <div class="produto-imagem">
+        Imagem em breve
+        <div class="produto-overlay">
+          <h3>IPA Artesanal</h3>
+          <span>600ml</span>
+        </div>
+      </div>
+      <div class="produto-info">
+        <div class="preco">R$ 22,00</div>
+        <a href="https://wa.me/5512997410925" target="_blank" class="btn-whatsapp">Pedir no WhatsApp</a>
+      </div>
+    </div>
+
+    <!-- PRODUTO 6 -->
+    <div class="produto">
+      <div class="produto-imagem">
+        Imagem em breve
+        <div class="produto-overlay">
+          <h3>IPA Artesanal</h3>
+          <span>600ml</span>
+        </div>
+      </div>
+      <div class="produto-info">
+        <div class="preco">R$ 22,00</div>
+        <a href="https://wa.me/5512997410925" target="_blank" class="btn-whatsapp">Pedir no WhatsApp</a>
+      </div>
+    </div>
+    <!-- PRODUTO 7 -->
+    <div class="produto">
+      <div class="produto-imagem">
+        Imagem em breve
+        <div class="produto-overlay">
+          <h3>IPA Artesanal</h3>
+          <span>600ml</span>
+        </div>
+      </div>
+      <div class="produto-info">
+        <div class="preco">R$ 22,00</div>
+        <a href="https://wa.me/5512997410925" target="_blank" class="btn-whatsapp">Pedir no WhatsApp</a>
+      </div>
+    </div>
+
+    <!-- PRODUTO 8 -->
+    <div class="produto">
+      <div class="produto-imagem">
+        Imagem em breve
+        <div class="produto-overlay">
+          <h3>IPA Artesanal</h3>
+          <span>600ml</span>
+        </div>
+      </div>
+      <div class="produto-info">
+        <div class="preco">R$ 22,00</div>
+        <a href="https://wa.me/5512997410925" target="_blank" class="btn-whatsapp">Pedir no WhatsApp</a>
+      </div>
+    </div>
+    <!-- DUPLIQUE ESTE BLOCO PARA MAIS CERVEJAS -->
+<!-- PRODUTO 9 -->
+    <div class="produto">
+      <div class="produto-imagem">
+        Imagem em breve
+        <div class="produto-overlay">
+          <h3>IPA Artesanal</h3>
+          <span>600ml</span>
+        </div>
+      </div>
+      <div class="produto-info">
+        <div class="preco">R$ 22,00</div>
+        <a href="https://wa.me/5512997410925" target="_blank" class="btn-whatsapp">Pedir no WhatsApp</a>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+</body>
+</html>
+
+
+
+<!-- CTA / SOCIAL COM IMAGEM-->
+<section class="cta-social">
+  <div class="cta-overlay"></div>
+
+ 
+    <div class="cta-content animar">
+
+    <h2>Venha conhecer</h2>
+    <p>São Bento do Sapucaí – SP</p>
+
+    <a href="https://www.instagram.com/dubaucervejariaartesanal"
+       target="_blank"
+       class="btn btn-instagram">
+      Instagram
+      
+
+    </a>
+  </div>
+</section>
+<footer>
+  <p>© 2025 Du Baú Cervejaria Artesanal</p>
+</footer>
 
 </body>
 </html>
