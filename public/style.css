@@ -527,3 +527,31 @@ footer {
     font-size: 2.2rem;
   }
 }
+.cerveja-imagem {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+}
+
+.imagem-cerveja {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.produto-imagem {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.produto-imagem img {
+  width: 100%;
+  height: 200%;
+  object-fit: cover;
+  display: block;
+}
