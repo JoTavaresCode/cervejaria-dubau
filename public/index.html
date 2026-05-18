@@ -4,24 +4,349 @@
   <meta charset="UTF-8">
   <title>Dù Baú Cervejaria Artesanal em São Bento do Sapucaí | Chopp Artesanal</title>
   <link rel="stylesheet" href="style.css">
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="A Dù Baú é uma cervejaria artesanal em São Bento do Sapucaí – SP, com chopp artesanal, espaço acolhedor, eventos cervejeiros e atendimento via WhatsApp.">
-
-  <!-- Fontes -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
- 
-
-
 </head>
 <body>
+
+<!-- =========================================================
+     PAINEL ADMINISTRATIVO — Oculto por padrão
+     Acesso: clique em "Admin" no rodapé → login → painel
+========================================================== -->
+<div id="admin-overlay">
+
+  <!-- TELA DE LOGIN -->
+  <div id="admin-login">
+    <div class="login-box">
+      <img src="imagens/logo1.PNG" class="login-logo" alt="Logo Du Baú" onerror="this.style.display='none'" style="width:80px;height:80px;object-fit:cover;object-position:center top;">
+      <h2>Área Administrativa</h2>
+      <p>Dù Baú Cervejaria Artesanal</p>
+      <input type="text" id="login-user" placeholder="Usuário" autocomplete="off">
+      <input type="password" id="login-pass" placeholder="Senha">
+      <button onclick="adminLogin()">Entrar</button>
+      <div class="login-erro" id="login-erro"></div>
+    </div>
+  </div>
+
+  <!-- PAINEL PRINCIPAL -->
+  <div id="admin-painel">
+
+    <!-- SIDEBAR -->
+    <nav class="admin-sidebar">
+      <div class="sidebar-logo">
+        <h3>Dù Baú Admin</h3>
+        <small>Painel de Controle</small>
+      </div>
+      <div class="sidebar-nav">
+        <a href="#" class="ativo" onclick="adminNav('dashboard',this)"><span class="icon">📊</span> Dashboard</a>
+        <a href="#" onclick="adminNav('produtos',this)"><span class="icon">🛍️</span> Produtos</a>
+        <a href="#" onclick="adminNav('cervejas',this)"><span class="icon">🍺</span> Cervejas</a>
+        <a href="#" onclick="adminNav('conteudo',this)"><span class="icon">✏️</span> Conteúdo</a>
+        <a href="#" onclick="adminNav('eventos',this)"><span class="icon">🎉</span> Eventos</a>
+      </div>
+      <div class="sidebar-sair">
+        <button onclick="adminSair()">⬅ Sair do Admin</button>
+      </div>
+    </nav>
+
+    <!-- CONTEÚDO DO PAINEL -->
+    <main class="admin-main">
+
+      <!-- DASHBOARD -->
+      <div id="sec-dashboard" class="admin-section ativo">
+        <h2>Dashboard</h2>
+        <p class="secao-desc">Visão geral do site Dù Baú</p>
+        <div class="dash-cards">
+          <div class="dash-card">
+            <div class="dc-icon">🛍️</div>
+            <div class="dc-num" id="dc-produtos">0</div>
+            <div class="dc-label">Produtos na Loja</div>
+          </div>
+          <div class="dash-card">
+            <div class="dc-icon">🍺</div>
+            <div class="dc-num" id="dc-cervejas">0</div>
+            <div class="dc-label">Cervejas Cadastradas</div>
+          </div>
+          <div class="dash-card">
+            <div class="dc-icon">🎉</div>
+            <div class="dc-num" id="dc-eventos">0</div>
+            <div class="dc-label">Eventos/Cards</div>
+          </div>
+          <div class="dash-card">
+            <div class="dc-icon">🏆</div>
+            <div class="dc-num" id="dc-premios">0</div>
+            <div class="dc-label">Premiações</div>
+          </div>
+        </div>
+        <div class="admin-tabela">
+          <h3>⚡ Acesso Rápido</h3>
+          <ul class="tabela-lista">
+            <li>
+              <div class="tl-info"><strong>Adicionar novo produto à Loja</strong><span>Aparece automaticamente na loja.html</span></div>
+              <div class="tl-acoes"><button class="tl-btn" onclick="adminNav('produtos', null)">Ir →</button></div>
+            </li>
+            <li>
+              <div class="tl-info"><strong>Cadastrar nova cerveja</strong><span>Aparece na página cervejas.html</span></div>
+              <div class="tl-acoes"><button class="tl-btn" onclick="adminNav('cervejas', null)">Ir →</button></div>
+            </li>
+            <li>
+              <div class="tl-info"><strong>Editar textos do site</strong><span>Hero, Sobre, Rodapé e mais</span></div>
+              <div class="tl-acoes"><button class="tl-btn" onclick="adminNav('conteudo', null)">Ir →</button></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PRODUTOS -->
+      <div id="sec-produtos" class="admin-section">
+        <h2>Gerenciar Produtos</h2>
+        <p class="secao-desc">Produtos exibidos na página Loja</p>
+
+        <div class="admin-form">
+          <h3>➕ Adicionar / Editar Produto</h3>
+          <input type="hidden" id="prod-edit-id">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nome do Produto *</label>
+              <input type="text" id="prod-nome" placeholder="Ex: Blond Ale 500ml">
+            </div>
+            <div class="form-group">
+              <label>Preço *</label>
+              <input type="text" id="prod-preco" placeholder="Ex: R$ 30,00">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Subtítulo / Volume</label>
+              <input type="text" id="prod-sub" placeholder="Ex: 500ml ou Edição Limitada">
+            </div>
+            <div class="form-group">
+              <label>Categoria</label>
+              <select id="prod-cat">
+                <option value="cervejas">Cervejas</option>
+                <option value="vestuario">Vestuário</option>
+                <option value="acessorios">Acessórios</option>
+                <option value="copos">Copos / Canecas</option>
+                <option value="especiais">Especiais</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="form-group">
+              <label>URL da Imagem</label>
+              <input type="text" id="prod-img" placeholder="imagens/Loja/produto.jpeg ou URL externa">
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="form-group">
+              <label>Texto do Botão</label>
+              <input type="text" id="prod-btn" placeholder="Pedir no WhatsApp">
+            </div>
+          </div>
+          <button class="btn-admin" onclick="salvarProduto()">💾 Salvar Produto</button>
+          <button class="btn-admin secundario" onclick="limparFormProduto()">Cancelar</button>
+        </div>
+
+        <div class="admin-tabela">
+          <h3>📦 Produtos Cadastrados</h3>
+          <ul class="tabela-lista" id="lista-produtos-admin"></ul>
+        </div>
+      </div>
+
+      <!-- CERVEJAS -->
+      <div id="sec-cervejas" class="admin-section">
+        <h2>Gerenciar Cervejas</h2>
+        <p class="secao-desc">Cervejas exibidas na página Cervejas</p>
+
+        <div class="admin-form">
+          <h3>➕ Adicionar / Editar Cerveja</h3>
+          <input type="hidden" id="cerv-edit-id">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nome da Cerveja *</label>
+              <input type="text" id="cerv-nome" placeholder="Ex: Dù Baú American Blond Ale">
+            </div>
+            <div class="form-group">
+              <label>Estilo</label>
+              <input type="text" id="cerv-estilo" placeholder="Ex: American Blond Ale - Edição Limitada">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>IBU</label>
+              <input type="text" id="cerv-ibu" placeholder="Ex: 17">
+            </div>
+            <div class="form-group">
+              <label>ABV / Teor Alcoólico</label>
+              <input type="text" id="cerv-alc" placeholder="Ex: 4,5%">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Cor</label>
+              <input type="text" id="cerv-cor" placeholder="Ex: Amarelo palha a dourada">
+            </div>
+            <div class="form-group">
+              <label>Medalha / Premiação</label>
+              <select id="cerv-medalha">
+                <option value="">Sem medalha</option>
+                <option value="ouro">🥇 Ouro</option>
+                <option value="prata">🥈 Prata</option>
+                <option value="bronze">🥉 Bronze</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="form-group">
+              <label>Descrição</label>
+              <textarea id="cerv-desc" placeholder="Descreva a cerveja, notas, aromas..."></textarea>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>URL da Imagem</label>
+              <input type="text" id="cerv-img" placeholder="imagens/cervejas/blond-ale.jpeg">
+            </div>
+            <div class="form-group">
+              <label>Texto da Premiação</label>
+              <input type="text" id="cerv-premio" placeholder="Ex: 🏆 Medalha de Ouro – Concurso 2025">
+            </div>
+          </div>
+          <button class="btn-admin" onclick="salvarCerveja()">💾 Salvar Cerveja</button>
+          <button class="btn-admin secundario" onclick="limparFormCerveja()">Cancelar</button>
+        </div>
+
+        <div class="admin-tabela">
+          <h3>🍺 Cervejas Cadastradas</h3>
+          <ul class="tabela-lista" id="lista-cervejas-admin"></ul>
+        </div>
+      </div>
+
+      <!-- CONTEÚDO DO SITE -->
+      <div id="sec-conteudo" class="admin-section">
+        <h2>Editar Conteúdo</h2>
+        <p class="secao-desc">Textos exibidos no site principal</p>
+
+        <div class="content-blocks">
+
+          <div class="content-block">
+            <h3>🏠 Seção "Sobre" (Página Inicial)</h3>
+            <label>Título Principal</label>
+            <input type="text" id="cb-sobre-titulo" placeholder="Bem-vindo à Dù Baú!">
+            <label>Subtítulo</label>
+            <input type="text" id="cb-sobre-sub" placeholder="A Cervejaria Artesanal da Serra da Mantiqueira">
+            <label>Texto da História</label>
+            <textarea id="cb-sobre-texto" placeholder="Texto da seção sobre..."></textarea>
+            <div class="bloco-salvar">
+              <button class="btn-admin" onclick="salvarConteudo('sobre')">Salvar</button>
+              <span class="salvo-ok" id="ok-sobre">✓ Salvo!</span>
+            </div>
+          </div>
+
+          <div class="content-block">
+            <h3>📞 Contato e WhatsApp</h3>
+            <label>Número WhatsApp (com DDI)</label>
+            <input type="text" id="cb-whatsapp" placeholder="5512997410925">
+            <label>Instagram (URL completa)</label>
+            <input type="text" id="cb-instagram" placeholder="https://www.instagram.com/dubaucervejariaartesanal">
+            <div class="bloco-salvar">
+              <button class="btn-admin" onclick="salvarConteudo('contato')">Salvar</button>
+              <span class="salvo-ok" id="ok-contato">✓ Salvo!</span>
+            </div>
+          </div>
+
+          <div class="content-block">
+            <h3>ℹ️ Cards de Informação</h3>
+            <label>Card 1 – Título</label>
+            <input type="text" id="cb-info1t" placeholder="🍺 Chopp">
+            <label>Card 1 – Texto</label>
+            <input type="text" id="cb-info1p" placeholder="São 10 torneiras artesanais">
+            <label>Card 2 – Título</label>
+            <input type="text" id="cb-info2t" placeholder="🕒 Horário">
+            <label>Card 2 – Texto</label>
+            <input type="text" id="cb-info2p" placeholder="Quarta à Domingo / 12h às 21h">
+            <label>Card 3 – Título</label>
+            <input type="text" id="cb-info3t" placeholder="🐶 Pet Friendly">
+            <label>Card 3 – Texto</label>
+            <input type="text" id="cb-info3p" placeholder="Seu pet é bem-vindo!">
+            <div class="bloco-salvar">
+              <button class="btn-admin" onclick="salvarConteudo('info')">Salvar</button>
+              <span class="salvo-ok" id="ok-info">✓ Salvo!</span>
+            </div>
+          </div>
+
+          <div class="content-block">
+            <h3>🦶 Rodapé</h3>
+            <label>Texto do Rodapé</label>
+            <input type="text" id="cb-footer" placeholder="© Du Baú Cervejaria Artesanal - São Bento do Sapucaí - SP">
+            <div class="bloco-salvar">
+              <button class="btn-admin" onclick="salvarConteudo('footer')">Salvar</button>
+              <span class="salvo-ok" id="ok-footer">✓ Salvo!</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- EVENTOS -->
+      <div id="sec-eventos" class="admin-section">
+        <h2>Gerenciar Eventos</h2>
+        <p class="secao-desc">Cards de eventos exibidos na página inicial</p>
+
+        <div class="admin-form">
+          <h3>➕ Adicionar / Editar Evento</h3>
+          <input type="hidden" id="ev-edit-id">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Título do Evento *</label>
+              <input type="text" id="ev-titulo" placeholder="Ex: Música ao Vivo">
+            </div>
+            <div class="form-group">
+              <label>URL da Imagem</label>
+              <input type="text" id="ev-img" placeholder="imagens/evento1.JPG">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Descrição curta</label>
+              <input type="text" id="ev-desc" placeholder="Ex: Todo sábado a partir das 18h">
+            </div>
+            <div class="form-group">
+              <label>Link do Botão</label>
+              <input type="text" id="ev-link" placeholder="https://wa.me/5512997410925">
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="form-group">
+              <label>Texto do Botão</label>
+              <input type="text" id="ev-btn" placeholder="Falar no WhatsApp">
+            </div>
+          </div>
+          <button class="btn-admin" onclick="salvarEvento()">💾 Salvar Evento</button>
+          <button class="btn-admin secundario" onclick="limparFormEvento()">Cancelar</button>
+        </div>
+
+        <div class="admin-tabela">
+          <h3>🎉 Eventos Cadastrados</h3>
+          <ul class="tabela-lista" id="lista-eventos-admin"></ul>
+        </div>
+      </div>
+
+    </main>
+  </div><!-- /admin-painel -->
+</div><!-- /admin-overlay -->
+
+<!-- =========================================================
+     SITE PÚBLICO — Começa aqui
+========================================================== -->
 
 <header class="hero" id="inicio">
   <nav class="menu">
     <div></div>
     <div class="menu-toggle" onclick="toggleMenu()">☰</div>
     <ul id="menu-links">
-      <li><a href="inicio.html">Início</a></li>
+      <li><a href="index.html">Início</a></li>
       <li><a href="cervejas.html">Cervejas</a></li>
       <li><a href="loja.html">Loja</a></li>
     </ul>
@@ -36,29 +361,28 @@
       <img src="imagens/logo1.PNG" class="logo" alt="Logo Cervejaria Du Baú em São Bento do Sapucaí-SP">
       <h1>Dù Baú</h1>
       <p>Cervejaria Artesanal</p>
-      <a href="https://wa.me/5512997410925" class="btn">Falar no WhatsApp</a>
+      <a id="pub-whatsapp-btn" href="https://wa.me/5512997410925" class="btn">Falar no WhatsApp</a>
     </div>
   </div>
 </header>
 
 <section class="sobre" id="sobre">
-  <h1>Bem-vindo à Dù Baú!</h1>
-  <p>A Cervejaria Artesanal da Serra da Mantiqueira</p>
+  <h1 id="pub-sobre-titulo">Bem-vindo à Dù Baú!</h1>
+  <p id="pub-sobre-sub">A Cervejaria Artesanal da Serra da Mantiqueira</p>
   <h1>Nossa História!</h1>
   <br>
-  <p>A <strong>Dù Baú</strong> é um destino para quem busca boa cerveja, paisagens únicas e 
+  <p id="pub-sobre-texto">A <strong>Dù Baú</strong> é um destino para quem busca boa cerveja, paisagens únicas e 
     experiências autênticas.
   Produzimos cervejas artesanais desde 2021 e em abril de 2025 inauguramos nosso espaço no Vale Do Baú 
   em São Bento do Sapucaí – SP, dentro da Rota dos Vinhos da Serra da Mantiqueira. Cercado pela natureza e com cervejas premiadas
 em concursos nacionais, nosso espaço foi criado para receber, brindar e aproveitar cada momento com calma.
-<br>Venha Brindar com a Gente!<br>
-</p>
+<br>Venha Brindar com a Gente!</p>
 </section>
 
 <section class="info">
-  <div class="info-card"><h3>🍺 Chopp</h3><p> São 10 torneiras artesanais</p></div>
-  <div class="info-card"><h3>🕒 Horário</h3><p>Quarta à Domingo<br>12h às 21h</p></div>
-  <div class="info-card"><h3>🐶 Pet Friendly</h3><p>Seu pet é bem-vindo! </p></div>
+  <div class="info-card"><h3 id="pub-info1t">🍺 Chopp</h3><p id="pub-info1p"> São 10 torneiras artesanais</p></div>
+  <div class="info-card"><h3 id="pub-info2t">🕒 Horário</h3><p id="pub-info2p">Quarta à Domingo<br>12h às 21h</p></div>
+  <div class="info-card"><h3 id="pub-info3t">🐶 Pet Friendly</h3><p id="pub-info3p">Seu pet é bem-vindo! </p></div>
 </section>
 
 <section class="galeria">
@@ -70,130 +394,70 @@ em concursos nacionais, nosso espaço foi criado para receber, brindar e aprovei
   </div>
 </section>
 
-<!--Sessão Eventos-->
-
-  <section class="eventos-header">
+<section class="eventos-header">
   <h2>
     <span>Eventos e Experiências</span>
     <small>Dù Baú Cervejaria Artesanal</small>
   </h2>
-<!-- INTRO -->
-<section class="eventos-intro">
-
-  <h2>Momentos que criamos juntos</h2>
-  <p>
-    Nossa cervejaria é palco de encontros, brincadeiras, música ao vivo
-    e experiências que vão além da cerveja.
-  </p>
 </section>
-  </section>
-<!-- GALERIA DE EVENTOS -->
-<section class="eventos-galeria">
 
+<section class="eventos-intro">
+  <h2>Momentos que criamos juntos</h2>
+  <p>Nossa cervejaria é palco de encontros, brincadeiras, música ao vivo
+    e experiências que vão além da cerveja.</p>
+</section>
+
+<!-- Cards de eventos — dinâmicos via admin -->
+<section class="eventos-galeria" id="pub-eventos-grid">
+  <!-- Eventos padrão (usados se não houver dados do admin) -->
   <div class="evento-card">
     <img src="imagens/evento1.JPG" alt="Música ao vivo">
-    <div class="evento-info">
-      <h3>Petiscos</h3>
-      <p>Os Mais Deliciosos Lanches.</p><br>
-      <a href="https://wa.me/5512997410925" class="btn">Venha Conhecer!</a>
-    </div>
+    <div class="evento-info"><h3>Petiscos</h3><p>Os Mais Deliciosos Lanches.</p><br><a href="https://wa.me/5512997410925" class="btn">Venha Conhecer!</a></div>
   </div>
-
   <div class="evento-card">
     <img src="imagens/Marionetedechopp (1).jpeg" alt="Jogos e brincadeiras">
-    <div class="evento-info">
-      <h3>Jogos & Brincadeiras</h3>
-      <p>Jogos e desafios. Quer Agendar?</p><br><br>
-      <a href="https://wa.me/5512997410925" class="btn">Falar no WhatsApp</a>
-    </div>
+    <div class="evento-info"><h3>Jogos & Brincadeiras</h3><p>Jogos e desafios. Quer Agendar?</p><br><a href="https://wa.me/5512997410925" class="btn">Falar no WhatsApp</a></div>
   </div>
-
   <div class="evento-card">
     <img src="imagens/pessoas/pessoa5.jpeg" alt="Eventos especiais">
-    <div class="evento-info">
-      <h3>Eventos Temáticos</h3>
-      <p> Datas Comemorativas!.</p><br>
-      <a href="https://wa.me/5512997410925" class="btn">Falar no WhatsApp</a>
-    </div>
+    <div class="evento-info"><h3>Eventos Temáticos</h3><p> Datas Comemorativas!</p><br><a href="https://wa.me/5512997410925" class="btn">Falar no WhatsApp</a></div>
   </div>
-
-    <div class="evento-card">
-    <img src="imagens/cervejas/garrafas 30,00.jpeg" alt="Eventos especiais">
-    <div class="evento-info">
-      <h3>As melhores Cervejas</h3>
-      <p>Comemore com cervejas especiais!</p><br>
-      <a href="loja.html" class="btn">Ver Loja</a>
-    </div>
+  <div class="evento-card">
+    <img src="imagens/cervejas/garrafas 30,00.jpeg" alt="Cervejas">
+    <div class="evento-info"><h3>As melhores Cervejas</h3><p>Comemore com cervejas especiais!</p><br><a href="loja.html" class="btn">Ver Loja</a></div>
   </div>
-
-    <div class="evento-card">
-    <img src="imagens/Loja/Camisetas 80,00 (2).jpeg" alt="Eventos especiais">
-    <div class="evento-info">
-      <h3>Itens Temáticos</h3>
-      <p>Produtos da Nossa Loja.</p><br>
-      <a href="loja.html" class="btn">Ver Loja</a>
-    </div>
+  <div class="evento-card">
+    <img src="imagens/Loja/Camisetas 80,00 (2).jpeg" alt="Loja">
+    <div class="evento-info"><h3>Itens Temáticos</h3><p>Produtos da Nossa Loja.</p><br><a href="loja.html" class="btn">Ver Loja</a></div>
   </div>
-
-    <div class="evento-card">
-    <img src="imagens/Loja/copo stout 500ml 35,00.jpeg" alt="Eventos especiais">
-    <div class="evento-info">
-      <h3>Quer agendar para grupo?</h3>
-      <p>Clima descontraído ao pôr do sol para curtir com família e amigos.</p><br>
-      <a href="https://wa.me/5512997410925" class="btn">Agende no WhatsApp</a>
-    </div>
+  <div class="evento-card">
+    <img src="imagens/Loja/copo stout 500ml 35,00.jpeg" alt="Grupo">
+    <div class="evento-info"><h3>Quer agendar para grupo?</h3><p>Clima descontraído ao pôr do sol.</p><br><a href="https://wa.me/5512997410925" class="btn">Agende no WhatsApp</a></div>
   </div>
-
 </section>
-<!--sessão cervejas premiadas-->
 
 <section class="cervejas-lista">
-
-  <!-- CERVEJA 1 -->
   <article class="cerveja-card">
     <div class="cerveja-imagem">
-      <div class="cerveja-imagem">
-  <span class="selo-medalha ouro">Ouro 2025</span>
-<img
-      src="imagens/cervejas/blond-ale.jpeg"
-      alt="Cerveja Dù Baú blond ale"
-      class="imagem-cerveja"
-    >
-</div>
-
+      <span class="selo-medalha ouro">Ouro 2025</span>
+      <img src="imagens/cervejas/blond-ale.jpeg" alt="Cerveja Dù Baú blond ale" class="imagem-cerveja">
     </div>
-
-
     <section class="eventos-header">
-  <h2>
-    <span>Destaque para uma de nossas Premiadas</span>
-    <small>Venha Provar!</small>
-  </h2>
-
+      <h2><span>Destaque para uma de nossas Premiadas</span><small>Venha Provar!</small></h2>
+    </section>
     <div class="cerveja-info">
       <h2>Dù Baú American Blond Ale</h2>
       <span class="cerveja-estilo">American Blond Ale - Edição Limitada</span>
       <ul class="cerveja-dados">
         <li><strong>IBU:</strong> 17</li>
-        <li><strong>EBC:</strong>  </li>
         <li><strong>ALC:</strong> 4,5% </li>
         <li><strong>Cor:</strong> Amarelo palha a dourada</li>
       </ul>
-
-      <p class="cerveja-descricao">
-        Já provou uma cerveja artesanal deliciosa e premiada?
-       <p><strong>A Dú Baú tem a cerveja 1º Lugar no 5º Mestre Cervejeiro de Panela em 2025</strong>
-        
-      </p>
-
+      <p class="cerveja-descricao">Já provou uma cerveja artesanal deliciosa e premiada?<br><strong>A Dú Baú tem a cerveja 1º Lugar no 5º Mestre Cervejeiro de Panela em 2025</strong></p>
       <p class="cerveja-premios">🏆 Medalha de Ouro – Concurso Mestre Cervejeiro de Panela (2025)</p>
-    </div>
     </div>
   </article>
 </section>
-
-
-<!--Sessão de videos-->
 
 <section class="video-section">
   <div class="video-container">
@@ -203,16 +467,9 @@ em concursos nacionais, nosso espaço foi criado para receber, brindar e aprovei
   </div>
 </section>
 
-<!--mapa -->
-
 <section class="mapa" id="mapa">
   <h2>Como chegar na Dù Baú</h2>
-  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3680.603463409056!2d-45.6407583246956!3d-22.705800979397107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cc7d4d94d98e47%3A0x372bcac89d9a52ea!2sD%C3%B9%20Ba%C3%BA%20Cervejaria%20Artesanal!5e0!3m2!1spt-BR!2sbr!4v1769642346783!5m2!1spt-BR!2sbr"
-  width="100%" 
-  height="450" 
-  loading="lazy">
-</iframe>
-
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3680.603463409056!2d-45.6407583246956!3d-22.705800979397107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cc7d4d94d98e47%3A0x372bcac89d9a52ea!2sD%C3%B9%20Ba%C3%BA%20Cervejaria%20Artesanal!5e0!3m2!1spt-BR!2sbr!4v1769642346783!5m2!1spt-BR!2sbr" width="100%" height="450" loading="lazy"></iframe>
 </section>
 
 <section class="cta-social">
@@ -220,26 +477,416 @@ em concursos nacionais, nosso espaço foi criado para receber, brindar e aprovei
   <div class="cta-content">
     <h2>Venha conhecer</h2>
     <p>São Bento do Sapucaí – SP</p>
-    <a href="https://www.instagram.com/dubaucervejariaartesanal" target="_blank" class="btn btn-instagram">Instagram</a>
+    <a id="pub-instagram-btn" href="https://www.instagram.com/dubaucervejariaartesanal" target="_blank" class="btn btn-instagram">Instagram</a>
   </div>
 </section>
 
 <footer>
-  <p>© Du Baú Cervejaria Artesanal - São Bento do Sapucaí - SP</p>
+  <p id="pub-footer-texto">© Du Baú Cervejaria Artesanal - São Bento do Sapucaí - SP</p>
+  <a href="#" class="admin-access-link" onclick="abrirAdmin(event)">admin</a>
 </footer>
 
+<!-- =========================================================
+     SCRIPTS
+========================================================== -->
 <script>
-  function toggleMenu() {
-    document.getElementById('menu-links').classList.toggle('active');
-  }
+/* ——— MENU & SLIDER ——— */
+function toggleMenu() {
+  document.getElementById('menu-links').classList.toggle('active');
+}
+const slides = document.querySelectorAll('.slide');
+let slideIdx = 0;
+setInterval(() => {
+  slides[slideIdx].classList.remove('active');
+  slideIdx = (slideIdx + 1) % slides.length;
+  slides[slideIdx].classList.add('active');
+}, 4000);
 
-  const slides = document.querySelectorAll('.slide');
-  let index = 0;
-  setInterval(() => {
-    slides[index].classList.remove('active');
-    index = (index + 1) % slides.length;
-    slides[index].classList.add('active');
-  }, 4000);
+/* ——— CREDENCIAIS ADMIN ——— */
+// Altere usuário e senha aqui:
+const ADMIN_USER = 'dubau';
+const ADMIN_PASS = 'cerveja2025';
+
+/* ——— ABRIR / FECHAR ADMIN ——— */
+function abrirAdmin(e) {
+  e.preventDefault();
+  document.getElementById('admin-overlay').classList.add('ativo');
+  const logado = sessionStorage.getItem('admin_logado');
+  if (logado) {
+    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-painel').classList.add('ativo');
+    atualizarDashboard();
+    renderListaAdmin();
+  }
+}
+
+function adminSair() {
+  sessionStorage.removeItem('admin_logado');
+  document.getElementById('admin-overlay').classList.remove('ativo');
+  document.getElementById('admin-login').style.display = 'flex';
+  document.getElementById('admin-painel').classList.remove('ativo');
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+}
+
+/* ——— LOGIN ——— */
+function adminLogin() {
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value;
+  const erro = document.getElementById('login-erro');
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    sessionStorage.setItem('admin_logado', '1');
+    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-painel').classList.add('ativo');
+    atualizarDashboard();
+    renderListaAdmin();
+    carregarCamposConteudo();
+  } else {
+    erro.textContent = 'Usuário ou senha incorretos.';
+    setTimeout(() => { erro.textContent = ''; }, 3000);
+  }
+}
+document.getElementById('login-pass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') adminLogin();
+});
+
+/* ——— NAVEGAÇÃO DO PAINEL ——— */
+function adminNav(secao, el) {
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('ativo'));
+  document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('ativo'));
+  document.getElementById('sec-' + secao).classList.add('ativo');
+  if (el) el.classList.add('ativo');
+  if (secao === 'conteudo') carregarCamposConteudo();
+}
+
+/* ——— DASHBOARD ——— */
+function atualizarDashboard() {
+  const produtos = JSON.parse(localStorage.getItem('dubau_produtos') || '[]');
+  const cervejas = JSON.parse(localStorage.getItem('dubau_cervejas') || '[]');
+  const eventos  = JSON.parse(localStorage.getItem('dubau_eventos')  || '[]');
+  const premios  = cervejas.filter(c => c.medalha).length;
+  document.getElementById('dc-produtos').textContent = produtos.length;
+  document.getElementById('dc-cervejas').textContent = cervejas.length;
+  document.getElementById('dc-eventos').textContent  = eventos.length;
+  document.getElementById('dc-premios').textContent  = premios;
+}
+
+/* ——— PRODUTOS ——— */
+function getProdutos() { return JSON.parse(localStorage.getItem('dubau_produtos') || '[]'); }
+function setProdutos(arr) { localStorage.setItem('dubau_produtos', JSON.stringify(arr)); }
+
+function salvarProduto() {
+  const nome  = document.getElementById('prod-nome').value.trim();
+  const preco = document.getElementById('prod-preco').value.trim();
+  if (!nome || !preco) { alert('Preencha nome e preço!'); return; }
+  const produtos = getProdutos();
+  const editId = document.getElementById('prod-edit-id').value;
+  const obj = {
+    id: editId || Date.now().toString(),
+    nome, preco,
+    sub: document.getElementById('prod-sub').value.trim(),
+    cat: document.getElementById('prod-cat').value,
+    img: document.getElementById('prod-img').value.trim(),
+    btn: document.getElementById('prod-btn').value.trim() || 'Pedir no WhatsApp'
+  };
+  if (editId) {
+    const idx = produtos.findIndex(p => p.id === editId);
+    if (idx > -1) produtos[idx] = obj; else produtos.push(obj);
+  } else {
+    produtos.push(obj);
+  }
+  setProdutos(produtos);
+  limparFormProduto();
+  renderListaAdmin();
+  atualizarDashboard();
+  alert('Produto salvo! Ele aparecerá na loja.html.');
+}
+
+function limparFormProduto() {
+  ['prod-edit-id','prod-nome','prod-preco','prod-sub','prod-img','prod-btn'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('prod-cat').value = 'cervejas';
+}
+
+function editarProduto(id) {
+  const p = getProdutos().find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('prod-edit-id').value = p.id;
+  document.getElementById('prod-nome').value = p.nome;
+  document.getElementById('prod-preco').value = p.preco;
+  document.getElementById('prod-sub').value = p.sub || '';
+  document.getElementById('prod-cat').value = p.cat || 'cervejas';
+  document.getElementById('prod-img').value = p.img || '';
+  document.getElementById('prod-btn').value = p.btn || '';
+  adminNav('produtos', null);
+  document.querySelector('.admin-form h3').textContent = '✏️ Editando Produto';
+}
+
+function excluirProduto(id) {
+  if (!confirm('Excluir este produto?')) return;
+  setProdutos(getProdutos().filter(p => p.id !== id));
+  renderListaAdmin();
+  atualizarDashboard();
+}
+
+/* ——— CERVEJAS ——— */
+function getCervejas() { return JSON.parse(localStorage.getItem('dubau_cervejas') || '[]'); }
+function setCervejas(arr) { localStorage.setItem('dubau_cervejas', JSON.stringify(arr)); }
+
+function salvarCerveja() {
+  const nome = document.getElementById('cerv-nome').value.trim();
+  if (!nome) { alert('Preencha o nome da cerveja!'); return; }
+  const cervejas = getCervejas();
+  const editId = document.getElementById('cerv-edit-id').value;
+  const obj = {
+    id: editId || Date.now().toString(),
+    nome,
+    estilo: document.getElementById('cerv-estilo').value.trim(),
+    ibu: document.getElementById('cerv-ibu').value.trim(),
+    alc: document.getElementById('cerv-alc').value.trim(),
+    cor: document.getElementById('cerv-cor').value.trim(),
+    medalha: document.getElementById('cerv-medalha').value,
+    desc: document.getElementById('cerv-desc').value.trim(),
+    img: document.getElementById('cerv-img').value.trim(),
+    premio: document.getElementById('cerv-premio').value.trim()
+  };
+  if (editId) {
+    const idx = cervejas.findIndex(c => c.id === editId);
+    if (idx > -1) cervejas[idx] = obj; else cervejas.push(obj);
+  } else {
+    cervejas.push(obj);
+  }
+  setCervejas(cervejas);
+  limparFormCerveja();
+  renderListaAdmin();
+  atualizarDashboard();
+  alert('Cerveja salva! Ela aparecerá em cervejas.html.');
+}
+
+function limparFormCerveja() {
+  ['cerv-edit-id','cerv-nome','cerv-estilo','cerv-ibu','cerv-alc','cerv-cor','cerv-desc','cerv-img','cerv-premio'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('cerv-medalha').value = '';
+}
+
+function editarCerveja(id) {
+  const c = getCervejas().find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('cerv-edit-id').value = c.id;
+  document.getElementById('cerv-nome').value = c.nome;
+  document.getElementById('cerv-estilo').value = c.estilo || '';
+  document.getElementById('cerv-ibu').value = c.ibu || '';
+  document.getElementById('cerv-alc').value = c.alc || '';
+  document.getElementById('cerv-cor').value = c.cor || '';
+  document.getElementById('cerv-medalha').value = c.medalha || '';
+  document.getElementById('cerv-desc').value = c.desc || '';
+  document.getElementById('cerv-img').value = c.img || '';
+  document.getElementById('cerv-premio').value = c.premio || '';
+  adminNav('cervejas', null);
+}
+
+function excluirCerveja(id) {
+  if (!confirm('Excluir esta cerveja?')) return;
+  setCervejas(getCervejas().filter(c => c.id !== id));
+  renderListaAdmin();
+  atualizarDashboard();
+}
+
+/* ——— EVENTOS ——— */
+function getEventos() { return JSON.parse(localStorage.getItem('dubau_eventos') || '[]'); }
+function setEventos(arr) { localStorage.setItem('dubau_eventos', JSON.stringify(arr)); }
+
+function salvarEvento() {
+  const titulo = document.getElementById('ev-titulo').value.trim();
+  if (!titulo) { alert('Preencha o título!'); return; }
+  const eventos = getEventos();
+  const editId = document.getElementById('ev-edit-id').value;
+  const obj = {
+    id: editId || Date.now().toString(),
+    titulo,
+    img: document.getElementById('ev-img').value.trim(),
+    desc: document.getElementById('ev-desc').value.trim(),
+    link: document.getElementById('ev-link').value.trim() || 'https://wa.me/5512997410925',
+    btn: document.getElementById('ev-btn').value.trim() || 'Falar no WhatsApp'
+  };
+  if (editId) {
+    const idx = eventos.findIndex(e => e.id === editId);
+    if (idx > -1) eventos[idx] = obj; else eventos.push(obj);
+  } else {
+    eventos.push(obj);
+  }
+  setEventos(eventos);
+  limparFormEvento();
+  renderListaAdmin();
+  atualizarDashboard();
+  renderEventosPub();
+  alert('Evento salvo!');
+}
+
+function limparFormEvento() {
+  ['ev-edit-id','ev-titulo','ev-img','ev-desc','ev-link','ev-btn'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+}
+
+function editarEvento(id) {
+  const ev = getEventos().find(x => x.id === id);
+  if (!ev) return;
+  document.getElementById('ev-edit-id').value = ev.id;
+  document.getElementById('ev-titulo').value = ev.titulo;
+  document.getElementById('ev-img').value = ev.img || '';
+  document.getElementById('ev-desc').value = ev.desc || '';
+  document.getElementById('ev-link').value = ev.link || '';
+  document.getElementById('ev-btn').value = ev.btn || '';
+  adminNav('eventos', null);
+}
+
+function excluirEvento(id) {
+  if (!confirm('Excluir este evento?')) return;
+  setEventos(getEventos().filter(e => e.id !== id));
+  renderListaAdmin();
+  atualizarDashboard();
+  renderEventosPub();
+}
+
+/* ——— RENDERIZAR LISTAS NO ADMIN ——— */
+function renderListaAdmin() {
+  // Produtos
+  const lp = document.getElementById('lista-produtos-admin');
+  const produtos = getProdutos();
+  lp.innerHTML = produtos.length === 0
+    ? '<li style="color:#555;padding:16px 24px">Nenhum produto adicionado ainda.</li>'
+    : produtos.map(p => `
+      <li>
+        <div class="tl-info">
+          <strong>${p.nome}</strong>
+          <span>${p.preco} · ${p.cat}</span>
+        </div>
+        <div class="tl-acoes">
+          <button class="tl-btn" onclick="editarProduto('${p.id}')">Editar</button>
+          <button class="tl-btn excluir" onclick="excluirProduto('${p.id}')">Excluir</button>
+        </div>
+      </li>`).join('');
+
+  // Cervejas
+  const lc = document.getElementById('lista-cervejas-admin');
+  const cervejas = getCervejas();
+  lc.innerHTML = cervejas.length === 0
+    ? '<li style="color:#555;padding:16px 24px">Nenhuma cerveja adicionada ainda.</li>'
+    : cervejas.map(c => `
+      <li>
+        <div class="tl-info">
+          <strong>${c.nome}</strong>
+          <span>${c.estilo || ''} ${c.medalha ? '· 🏅 '+c.medalha : ''}</span>
+        </div>
+        <div class="tl-acoes">
+          <button class="tl-btn" onclick="editarCerveja('${c.id}')">Editar</button>
+          <button class="tl-btn excluir" onclick="excluirCerveja('${c.id}')">Excluir</button>
+        </div>
+      </li>`).join('');
+
+  // Eventos
+  const le = document.getElementById('lista-eventos-admin');
+  const eventos = getEventos();
+  le.innerHTML = eventos.length === 0
+    ? '<li style="color:#555;padding:16px 24px">Nenhum evento adicionado ainda.</li>'
+    : eventos.map(ev => `
+      <li>
+        <div class="tl-info">
+          <strong>${ev.titulo}</strong>
+          <span>${ev.desc || ''}</span>
+        </div>
+        <div class="tl-acoes">
+          <button class="tl-btn" onclick="editarEvento('${ev.id}')">Editar</button>
+          <button class="tl-btn excluir" onclick="excluirEvento('${ev.id}')">Excluir</button>
+        </div>
+      </li>`).join('');
+}
+
+/* ——— CONTEÚDO EDITÁVEL ——— */
+function getConteudo() { return JSON.parse(localStorage.getItem('dubau_conteudo') || '{}'); }
+function setConteudo(obj) { localStorage.setItem('dubau_conteudo', JSON.stringify(obj)); }
+
+function carregarCamposConteudo() {
+  const c = getConteudo();
+  const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
+  set('cb-sobre-titulo', c.sobreTitulo);
+  set('cb-sobre-sub',   c.sobreSub);
+  set('cb-sobre-texto', c.sobreTexto);
+  set('cb-whatsapp',    c.whatsapp);
+  set('cb-instagram',   c.instagram);
+  set('cb-info1t', c.info1t); set('cb-info1p', c.info1p);
+  set('cb-info2t', c.info2t); set('cb-info2p', c.info2p);
+  set('cb-info3t', c.info3t); set('cb-info3p', c.info3p);
+  set('cb-footer', c.footer);
+}
+
+function salvarConteudo(bloco) {
+  const c = getConteudo();
+  const gv = id => document.getElementById(id).value.trim();
+  if (bloco === 'sobre') {
+    c.sobreTitulo = gv('cb-sobre-titulo');
+    c.sobreSub    = gv('cb-sobre-sub');
+    c.sobreTexto  = gv('cb-sobre-texto');
+  } else if (bloco === 'contato') {
+    c.whatsapp  = gv('cb-whatsapp');
+    c.instagram = gv('cb-instagram');
+  } else if (bloco === 'info') {
+    c.info1t = gv('cb-info1t'); c.info1p = gv('cb-info1p');
+    c.info2t = gv('cb-info2t'); c.info2p = gv('cb-info2p');
+    c.info3t = gv('cb-info3t'); c.info3p = gv('cb-info3p');
+  } else if (bloco === 'footer') {
+    c.footer = gv('cb-footer');
+  }
+  setConteudo(c);
+  aplicarConteudoPublico(c);
+  const ok = document.getElementById('ok-' + bloco);
+  if (ok) { ok.style.display = 'inline'; setTimeout(() => { ok.style.display = 'none'; }, 2500); }
+}
+
+function aplicarConteudoPublico(c) {
+  const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.textContent = val; };
+  set('pub-sobre-titulo', c.sobreTitulo);
+  set('pub-sobre-sub',    c.sobreSub);
+  set('pub-sobre-texto',  c.sobreTexto);
+  set('pub-footer-texto', c.footer);
+  const setH = (id, val) => { const el = document.getElementById(id); if (el && val) el.innerHTML = val; };
+  setH('pub-info1t', c.info1t); setH('pub-info1p', c.info1p);
+  setH('pub-info2t', c.info2t); setH('pub-info2p', c.info2p);
+  setH('pub-info3t', c.info3t); setH('pub-info3p', c.info3p);
+  if (c.whatsapp) {
+    const btn = document.getElementById('pub-whatsapp-btn');
+    if (btn) btn.href = 'https://wa.me/' + c.whatsapp;
+  }
+  if (c.instagram) {
+    const ig = document.getElementById('pub-instagram-btn');
+    if (ig) ig.href = c.instagram;
+  }
+}
+
+/* ——— EVENTOS PÚBLICOS DINÂMICOS ——— */
+function renderEventosPub() {
+  const eventos = getEventos();
+  if (eventos.length === 0) return; // mantém o HTML original
+  const grid = document.getElementById('pub-eventos-grid');
+  grid.innerHTML = eventos.map(ev => `
+    <div class="evento-card">
+      ${ev.img ? `<img src="${ev.img}" alt="${ev.titulo}">` : ''}
+      <div class="evento-info">
+        <h3>${ev.titulo}</h3>
+        <p>${ev.desc || ''}</p><br>
+        <a href="${ev.link || 'https://wa.me/5512997410925'}" class="btn">${ev.btn || 'Falar no WhatsApp'}</a>
+      </div>
+    </div>`).join('');
+}
+
+/* ——— INICIALIZAÇÃO ——— */
+(function init() {
+  aplicarConteudoPublico(getConteudo());
+  renderEventosPub();
+})();
 </script>
 
 </body>

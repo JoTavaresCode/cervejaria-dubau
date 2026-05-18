@@ -5,7 +5,6 @@
   <title>Nossas Cervejas | Dù Baú Cervejaria Artesanal</title>
   <meta name="description" content="Conheça as cervejas artesanais da Dù Baú, com estilos, características, prêmios e detalhes de cada receita produzida em São Bento do Sapucaí – SP.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -21,396 +20,236 @@
       <li><a href="loja.html">Loja</a></li>
     </ul>
   </nav>
-
-  <!-- slider de imagens de fundo -->
   <div class="slider">
     <div class="slide active" style="background-image:url('imagens/cervejas/foto4.jpg')"></div>
     <div class="slide" style="background-image:url('imagens/cervejas/foto7.JPG')"></div>
     <div class="slide" style="background-image:url('imagens/espaco/8torneiras.jpg')"></div>
-
     <div class="hero-content">
       <img src="imagens/logo1.PNG" class="logo" alt="Logo Cervejaria Du Baú em São Bento do Sapucaí-SP">
       <h1>Dù Baú</h1>
       <p>Cervejaria Artesanal</p>
       <a href="https://wa.me/5512997410925" class="btn">Falar no WhatsApp</a>
     </div>
-
-
-
-    
   </div>
 </header>
 
 <section class="cervejas-intro">
   <h1>Nossas Cervejas</h1>
-    <p>Receitas artesanais criadas no Vale do Baú</p>
-    <br></br>
-
-    <p>
-  A <strong>Dù Baú</strong> é um destino para quem busca boa cerveja, paisagens únicas e experiências autênticas.
+  <p>Receitas artesanais criadas no Vale do Baú</p>
+  <br>
+  <p>A <strong>Dù Baú</strong> é um destino para quem busca boa cerveja, paisagens únicas e experiências autênticas.
 Produzimos cervejas artesanais desde 2021 e, em abril de 2025, inauguramos nosso espaço no Vale do Baú, 
 em São Bento do Sapucaí, dentro da rota dos vinhos da Serra da Mantiqueira.
 Cercado pela natureza e com cervejas premiadas em concursos nacionais, nosso espaço foi criado para 
-receber, brindar e aproveitar cada momento com calma.
-  </p>
+receber, brindar e aproveitar cada momento com calma.</p>
 </section>
 
-<section class="cervejas-lista">
+<!-- CERVEJAS DO ADMIN (se existirem, são exibidas antes das fixas) -->
+<section class="cervejas-lista" id="cervejas-dinamicas" style="display:none;max-width:1100px;margin:0 auto;display:none;gap:60px;"></section>
 
-  <!-- CERVEJA 1 -->
+<!-- CERVEJAS FIXAS ORIGINAIS -->
+<section class="cervejas-lista" id="cervejas-fixas">
+
   <article class="cerveja-card">
     <div class="cerveja-imagem">
-      <div class="cerveja-imagem">
-  <span class="selo-medalha ouro">Ouro 2025</span>
-<img
-      src="imagens/cervejas/blond-ale.jpeg"
-      alt="Cerveja Dù Baú blond ale"
-      class="imagem-cerveja"
-    >
-</div>
-
+      <span class="selo-medalha ouro">Ouro 2025</span>
+      <img src="imagens/cervejas/blond-ale.jpeg" alt="Cerveja Dù Baú blond ale" class="imagem-cerveja">
     </div>
-
     <div class="cerveja-info">
       <h2>Dù Baú American Blond Ale</h2>
       <span class="cerveja-estilo">American Blond Ale - Edição Limitada</span>
       <ul class="cerveja-dados">
         <li><strong>IBU:</strong> 17</li>
-        <li><strong>EBC:</strong>  </li>
         <li><strong>ALC:</strong> 4,5% </li>
         <li><strong>Cor:</strong> Amarelo palha a dourada</li>
       </ul>
-
-      <p class="cerveja-descricao">
-        Premiada <strong>1º Lugar no 5º Mestre Cervejeiro de Panela em 2025</strong>
-        Cerveja aromática, com notas cítricas e florais, mel de laranjeira, pães e um leve toque de maracujá.
-      </p>
-
+      <p class="cerveja-descricao">Premiada <strong>1º Lugar no 5º Mestre Cervejeiro de Panela em 2025</strong>. Cerveja aromática, com notas cítricas e florais, mel de laranjeira, pães e um leve toque de maracujá.</p>
       <p class="cerveja-premios">🏆 Medalha de Ouro – Concurso Mestre Cervejeiro de Panela (2025)</p>
     </div>
   </article>
 
-  <!-- CERVEJA 2 -->
   <article class="cerveja-card">
     <div class="cerveja-imagem">
       <span class="selo-medalha prata">Prata 2024</span>
-    <img
-      src="imagens/cervejas/blond-ale.jpeg"
-      alt="Cerveja Dù Baú blond ale"
-      class="imagem-cerveja"
-    >
+      <img src="imagens/cervejas/blond-ale.jpeg" alt="Cerveja Dù Baú blond ale" class="imagem-cerveja">
     </div>
-
     <div class="cerveja-info">
       <h2>Dù Baú American Blond Ale</h2>
       <span class="cerveja-estilo">American Blond Ale - Edição Limitada</span>
-
       <ul class="cerveja-dados">
         <li><strong>IBU:</strong> 17</li>
-        <li><strong>EBC:</strong>  </li>
         <li><strong>ALC:</strong> 4,5% </li>
         <li><strong>Cor:</strong> Amarelo palha e dourada</li>
       </ul>
-
-      <p class="cerveja-descricao">
-        Premiada <strong>2º Lugar no 4º Mestre Cervejeiro de Panela em 2024</strong>
-        Cerveja aromática, com notas cítricas e florais, mel de laranjeira, pães e um leve toque de maracujá.
-      </p>
-
+      <p class="cerveja-descricao">Premiada <strong>2º Lugar no 4º Mestre Cervejeiro de Panela em 2024</strong>. Cerveja aromática, com notas cítricas e florais, mel de laranjeira, pães e um leve toque de maracujá.</p>
       <p class="cerveja-premios">🏆 Medalha de Prata – Concurso Mestre Cervejeiro de Panela (2024)</p>
     </div>
   </article>
-</section>
-  
-  <!-- CERVEJA 3 -->
-<section class="cervejas-lista">
+
   <article class="cerveja-card">
     <div class="cerveja-imagem">
       <span class="selo-medalha prata">Prata 2025</span>
-   <img
-      src="imagens/cervejas/chardonnay1 (1).jpeg"
-      alt="Cerveja Dù Baú Weiss"
-      class="imagem-cerveja"
-    >
-   
+      <img src="imagens/cervejas/chardonnay1 (1).jpeg" alt="Cerveja Dù Baú Weiss" class="imagem-cerveja">
     </div>
-
     <div class="cerveja-info">
       <h2>Dù Baú Italian Grape Ale de Chardonnay</h2>
       <span class="cerveja-estilo">Chardonnay - Edição Limitada</span>
-      
       <ul class="cerveja-dados">
-        <li><strong>IBU:</strong> </li>
-        <li><strong>EBC:</strong>  </li>
-        <li><strong>ALC:</strong>  </li>
         <li><strong>Cor:</strong> Amarelo palha e dourada</li>
       </ul>
-
-      <p class="cerveja-descricao">
-        Notas de abacaxi, pera e maçã verde, panificação, brioche e miolo de pão.
-        São caracteristícas da autólise de levedura, características aromáticas provenientes da uva Chardonnay.
-      </p>
-
+      <p class="cerveja-descricao">Notas de abacaxi, pera e maçã verde, panificação, brioche e miolo de pão. Características aromáticas provenientes da uva Chardonnay.</p>
       <p class="cerveja-premios">🏆 Medalha de Prata – Concurso Mestre Cervejeiro de Panela (2025)</p>
     </div>
   </article>
 
-  <!-- CERVEJA 4 -->
   <article class="cerveja-card">
     <div class="cerveja-imagem">
-      <span class="selo-medalha prata"></span>
-    <img
-      src="imagens/cervejas/Red Ale.jpeg"
-      alt="Cerveja Dù Baú Red Ale"
-      class="imagem-cerveja"
-    >
-    
+      <img src="imagens/cervejas/Red Ale.jpeg" alt="Cerveja Dù Baú Red Ale" class="imagem-cerveja">
     </div>
-
     <div class="cerveja-info">
       <h2>Red Ale - Pedra Rubra</h2>
       <span class="cerveja-estilo">Red Ale - Edição Limitada</span>
-    
-
-     <ul class="cerveja-dados">
-        <li><strong>IBU:</strong> </li>
-        <li><strong>EBC:</strong>  </li>
-        <li><strong>ALC:</strong> % </li>
+      <ul class="cerveja-dados">
         <li><strong>Cor:</strong> Rubi</li>
       </ul>
-
-      <p class="cerveja-descricao">
-        Cerveja de coloração avermelhada, com corpo médio e sabor marcante de malte, trazendo notas de caramelo e leve tostado.
-        Possui amargor equilibrado e final suave, resultando em uma cerveja saborosa e muito fácil de beber.      </p>
-
-      <p class="cerveja-premios">🏆 </p>
+      <p class="cerveja-descricao">Cerveja de coloração avermelhada, com corpo médio e sabor marcante de malte, trazendo notas de caramelo e leve tostado. Possui amargor equilibrado e final suave.</p>
     </div>
   </article>
 
-
-  <!-- CERVEJA 5 -->
   <article class="cerveja-card">
     <div class="cerveja-imagem">
-      <span class="selo-medalha prata"></span>
-    <img
-      src="imagens/cervejas/weiss brisa da mantiqueira.jpeg"
-      alt="Cerveja Dù Baú Weiss"
-      class="imagem-cerveja">
-    
-    
+      <img src="imagens/cervejas/weiss brisa da mantiqueira.jpeg" alt="Cerveja Dù Baú Weiss" class="imagem-cerveja">
     </div>
-
     <div class="cerveja-info">
       <h2>Dù Baú Weiss</h2>
       <span class="cerveja-estilo">Cerveja de Trigo - Brisa da Mantiqueira</span>
-
       <ul class="cerveja-dados">
-        <li><strong>IBU:</strong>10</li>
-        <li><strong>EBC:</strong> 8,50 </li>
-        <li><strong>ALC:</strong> 5,0% </li>
+        <li><strong>IBU:</strong> 10</li>
+        <li><strong>EBC:</strong> 8,50</li>
+        <li><strong>ALC:</strong> 5,0%</li>
         <li><strong>Cor:</strong> Amarelo palha e dourada</li>
       </ul>
-
-      <p class="cerveja-descricao">
-        Cerveja de trigo clara, leve e refrescante, com nespuma cremosa e abundante.
-        apresenta aromas frutados que lembram banana e leve nota de cravo, com amargor suave e final macio.
-        Perfeita para quem busca uma cerveja aromática e fácil de beber.
-        
-      </p>
-
-      <p class="cerveja-premios">🏆</p>
+      <p class="cerveja-descricao">Cerveja de trigo clara, leve e refrescante, com espuma cremosa e abundante. Aromas frutados que lembram banana e leve nota de cravo, com amargor suave e final macio.</p>
     </div>
   </article>
 
-
-  
-  <!-- CERVEJA 6 -->
   <article class="cerveja-card">
     <div class="cerveja-imagem">
-      <span class="selo-medalha prata"></span>
-      <img
-      src="imagens/cervejas/pilsen cristal da serra.jpeg"
-      alt="Cerveja Dù Baú Pilsen"
-      class="imagem-cerveja"
-    >
+      <img src="imagens/cervejas/pilsen cristal da serra.jpeg" alt="Cerveja Dù Baú Pilsen" class="imagem-cerveja">
     </div>
-
     <div class="cerveja-info">
       <h2>Dù Baú Pilsen</h2>
-      <span class="cerveja-estilo">Pilsen</span>
-
-       <ul class="cerveja-dados">
-        <li><strong>IBU:</strong>12</li>
-        <li><strong>EBC:</strong> 7,30 </li>
-        <li><strong>ALC:</strong> 4,5% </li>
+      <span class="cerveja-estilo">Pilsen - Cristal da Serra</span>
+      <ul class="cerveja-dados">
+        <li><strong>IBU:</strong> 12</li>
+        <li><strong>EBC:</strong> 7,30</li>
+        <li><strong>ALC:</strong> 4,5%</li>
         <li><strong>Cor:</strong> Amarelo turvo</li>
       </ul>
-
-      <p class="cerveja-descricao">
-        Pilsen (cristal da Serra)
-        Cerveja clara, leve e refrescante, com coloração dourada e espuma cremosa. Possui amargor suave 
-        e sabor equilibrado de malte e lúpulo, perfeita para quem aprecia uma Pilsen clássica e fácil de beber.
-      </p>
-
-      <p class="cerveja-premios">🏆 </p>
+      <p class="cerveja-descricao">Cerveja clara, leve e refrescante, com coloração dourada e espuma cremosa. Amargor suave e sabor equilibrado de malte e lúpulo, perfeita para quem aprecia uma Pilsen clássica.</p>
     </div>
   </article>
 
-
-
-  <!-- CERVEJA 7 -->
   <article class="cerveja-card">
     <div class="cerveja-imagem">
-      <span class="selo-medalha prata"></span>
-      <img
-      src="imagens/cervejas/session ipa sombra da pedra.jpeg"
-      alt="Cerveja Dù Baú Ipa"
-      class="imagem-cerveja"
-    >
+      <img src="imagens/cervejas/session ipa sombra da pedra.jpeg" alt="Cerveja Dù Baú Ipa" class="imagem-cerveja">
     </div>
-
     <div class="cerveja-info">
-      <h2>Dù Baú Session Ipa</h2>
-      <span class="cerveja-estilo">Sombra da Pedra</span>
-
+      <h2>Dù Baú Session Ipa – Sombra da Pedra</h2>
+      <span class="cerveja-estilo">Session IPA</span>
       <ul class="cerveja-dados">
-        <li><strong>IBU:</strong>37</li>
-        <li><strong>EBC:</strong> 11,50 </li>
-        <li><strong>ALC:</strong> 5% </li>
+        <li><strong>IBU:</strong> 37</li>
+        <li><strong>EBC:</strong> 11,50</li>
+        <li><strong>ALC:</strong> 5%</li>
         <li><strong>Cor:</strong> Amarelo turvo</li>
       </ul>
-
-      <p class="cerveja-descricao">
-        Session IPA –  Sombra da pedra 
-        Cerveja clara, leve e muito aromática. Destaca notas cítricas e frutadas dos lúpulos, 
-        com amargor equilibrado e alta refrescância. Uma IPA mais leve, fácil de beber e cheia de sabor. 
-      </p>
-
+      <p class="cerveja-descricao">Cerveja clara, leve e muito aromática. Destaca notas cítricas e frutadas dos lúpulos, com amargor equilibrado e alta refrescância.</p>
       <p class="cerveja-premios">🏆 Medalha de Prata – Festival Paulista de Cervejas (2023)</p>
     </div>
   </article>
 
-  <!-- CERVEJA 8 -->
   <article class="cerveja-card">
     <div class="cerveja-imagem">
-      <span class="selo-medalha prata"></span>
-      <img
-      src="imagens/cervejas/italian grape ale autolise.jpeg"
-      alt="Cerveja Dù Baú Italian Grape"
-      class="imagem-cerveja"
-    >
+      <img src="imagens/cervejas/italian grape ale autolise.jpeg" alt="Cerveja Dù Baú Italian Grape" class="imagem-cerveja">
     </div>
-
     <div class="cerveja-info">
-      <h2>Dù Baú Italian Grape Ale Em Autólise - Edição Limitada</h2>
-      <span class="cerveja-estilo">Edição Especial da Dù Baú</span>
-
+      <h2>Dù Baú Italian Grape Ale Em Autólise</h2>
+      <span class="cerveja-estilo">Edição Especial - Edição Limitada</span>
       <ul class="cerveja-dados">
-        <li><strong>IBU:</strong>  </li>
-        <li><strong>EBC:</strong>  </li>
-        <li><strong>ALC:</strong>  </li>
         <li><strong>Cor:</strong> Amarelo palha</li>
       </ul>
-
-      <p class="cerveja-descricao">
-        Refrescante e aromática, com notas de banana e cravo.
-        Uma cerveja leve, perfeita para dias quentes e encontros descontraídos.
-      </p>
-
+      <p class="cerveja-descricao">Refrescante e aromática, com notas de banana e cravo. Uma cerveja leve, perfeita para dias quentes e encontros descontraídos.</p>
       <p class="cerveja-premios">🏆 Medalha de Prata – Festival Paulista de Cervejas (2023)</p>
     </div>
   </article>
 
-  <!-- CERVEJA 9 -->
   <article class="cerveja-card">
     <div class="cerveja-imagem">
-      <span class="selo-medalha prata"></span>
-      <img
-      src="imagens/cervejas/session ipa sombra da pedra.jpeg"
-      alt="Cerveja Dù Baú Weiss"
-      class="imagem-cerveja"
-    >
+      <img src="imagens/cervejas/hidromel valhala.jpeg" alt="Cerveja Dù Baú Hidromel Valhala" class="imagem-cerveja">
     </div>
-
-    <div class="cerveja-info">
-      <h2>Dù Baú Session Ipa</h2>
-      <span class="cerveja-estilo">Sombra da Pedra</span>
-
-      <ul class="cerveja-dados">
-        <li><strong>ABV:</strong> 5,2%</li>
-        <li><strong>IBU:</strong> </li>
-        <li><strong>Cor:</strong> Amarelo turvo</li>
-      </ul>
-
-      <p class="cerveja-descricao">
-        Refrescante e aromática, com notas de banana e cravo.
-        Uma cerveja leve, perfeita para dias quentes e encontros descontraídos.
-      </p>
-
-      <p class="cerveja-premios">🏆 Medalha de Prata – Festival Paulista de Cervejas (2023)</p>
-    </div>
-  </article>
-
-  <!-- CERVEJA 10 -->
-  <article class="cerveja-card">
-    <div class="cerveja-imagem">
-      <span class="selo-medalha prata"></span>
-      <img
-      src="imagens/cervejas/hidromel valhala.jpeg"
-      alt="Cerveja Dù Baú Hidromel Valhala"
-      class="imagem-cerveja"
-    >
-    </div>
-
     <div class="cerveja-info">
       <h2>Dù Baú Hidromel Valhala</h2>
       <span class="cerveja-estilo">Bebida Especial</span>
-
       <ul class="cerveja-dados">
-        <li><strong>ALC:</strong>12 %</li>
+        <li><strong>ALC:</strong> 12%</li>
         <li><strong>CONTEÚDO:</strong> 750ML</li>
         <li><strong>Cor:</strong> Amarelo turvo</li>
       </ul>
-
-      <p class="cerveja-descricao">
-        O Hidromel Valhala é uma bebida especial, Nectár dos Deuses, bebida milenar que ficou famosa
-        entre os povos Nórdicos e Celtas, gerando vários mitos da criação favorita dos Deuses.
-        Hidromel é a bebida mais antiga do mundo, sua existência antecede a cerveja e o vinho.
-      </p>
-
-      <p class="cerveja-premios">🏆 Medalha de Prata – Festival Paulista de Cervejas (2023)</p>
+      <p class="cerveja-descricao">Néctar dos Deuses, bebida milenar que ficou famosa entre os povos Nórdicos e Celtas. Hidromel é a bebida mais antiga do mundo, sua existência antecede a cerveja e o vinho.</p>
     </div>
   </article>
 
-
 </section>
-</class>
 
-<!-- ================= CTA FINAL ================= -->
-<section class="cta-social">            
+<section class="cta-social">
   <div class="cta-overlay"></div>
-
   <div class="cta-content animar">
     <h2>Venha viver essa experiência</h2>
     <p>São Bento do Sapucaí – SP</p>
-
-    <a href="https://www.instagram.com/dubaucervejariaartesanal"
-       target="_blank"
-       class="btn btn-instagram">
-      Instagram
-      
-    </a>
+    <a href="https://www.instagram.com/dubaucervejariaartesanal" target="_blank" class="btn btn-instagram">Instagram</a>
   </div>
-
+</section>
 
 <footer>
   <p>© Dù Baú Cervejaria Artesanal – São Bento do Sapucaí – SP</p>
 </footer>
 
 <script>
-  function toggleMenu() {
-    document.getElementById("menu-links").classList.toggle("active");
-  }
+function toggleMenu() {
+  document.getElementById("menu-links").classList.toggle("active");
+}
+
+/* Cervejas dinâmicas do admin — exibidas ANTES das fixas */
+(function carregarCervejasAdmin() {
+  const cervejas = JSON.parse(localStorage.getItem('dubau_cervejas') || '[]');
+  if (cervejas.length === 0) return;
+
+  const sec = document.getElementById('cervejas-dinamicas');
+  sec.style.display = 'grid';
+
+  const medalhaLabel = { ouro: 'Ouro', prata: 'Prata', bronze: 'Bronze' };
+
+  sec.innerHTML = cervejas.map(c => `
+    <article class="cerveja-card">
+      <div class="cerveja-imagem">
+        ${c.medalha ? `<span class="selo-medalha ${c.medalha}">${medalhaLabel[c.medalha] || ''}</span>` : ''}
+        ${c.img
+          ? `<img src="${c.img}" alt="${c.nome}" class="imagem-cerveja">`
+          : `<div style="width:100%;height:100%;background:#ddd;display:flex;align-items:center;justify-content:center;font-size:4rem;">🍺</div>`}
+      </div>
+      <div class="cerveja-info">
+        <h2>${c.nome}</h2>
+        ${c.estilo ? `<span class="cerveja-estilo">${c.estilo}</span>` : ''}
+        <ul class="cerveja-dados">
+          ${c.ibu ? `<li><strong>IBU:</strong> ${c.ibu}</li>` : ''}
+          ${c.alc ? `<li><strong>ALC:</strong> ${c.alc}</li>` : ''}
+          ${c.cor ? `<li><strong>Cor:</strong> ${c.cor}</li>` : ''}
+        </ul>
+        ${c.desc ? `<p class="cerveja-descricao">${c.desc}</p>` : ''}
+        ${c.premio ? `<p class="cerveja-premios">${c.premio}</p>` : ''}
+      </div>
+    </article>`).join('');
+})();
 </script>
 
 </body>
