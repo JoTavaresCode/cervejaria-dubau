@@ -333,55 +333,99 @@ footer {
   max-width: 1100px;
   margin: 0 auto;
   display: grid;
-  gap: 60px;
+  gap: 50px;
+  padding: 60px 20px;
 }
 
 /* CARD */
 .cerveja-card {
   display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 40px;
-  align-items: center;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 0;
+  align-items: stretch;
+  background: #fff;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+  border: 1px solid rgba(201,162,77,0.25);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
+.cerveja-card:hover {
+  box-shadow: 0 16px 60px rgba(201,162,77,0.18);
+  transform: translateY(-3px);
+}
+
+/* IMAGEM */
 .cerveja-imagem {
-  height: 320px;
-  background: linear-gradient(135deg, #ddd, #eee);
-  border-radius: 18px;
-  border: 1px solid var(--dourado);
+  height: 100%;
+  min-height: 340px;
+  background: linear-gradient(135deg, #f0ece3, #e8e0d0);
+  border-radius: 0;
+  border: none;
+  border-right: 1px solid rgba(201,162,77,0.2);
 }
 
 /* INFO */
+.cerveja-info {
+  padding: 40px 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .cerveja-info h2 {
-  font-size: 2rem;
+  font-size: 1.9rem;
   margin-bottom: 6px;
+  color: #2b1e14;
+  line-height: 1.2;
 }
 
 .cerveja-estilo {
   display: inline-block;
-  font-size: 0.85rem;
-  letter-spacing: 1px;
+  font-size: 0.78rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
   color: var(--dourado);
-  margin-bottom: 18px;
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(201,162,77,0.2);
+  width: 100%;
 }
 
 .cerveja-dados {
   list-style: none;
   display: flex;
-  gap: 25px;
-  margin-bottom: 20px;
-  padding: 0;
-  font-size: 0.9rem;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  margin-bottom: 22px;
+  padding: 16px 20px;
+  background: #faf8f4;
+  border-radius: 12px;
+  border: 1px solid rgba(201,162,77,0.15);
+  font-size: 0.88rem;
+}
+
+.cerveja-dados li strong {
+  color: var(--dourado);
 }
 
 .cerveja-descricao {
   color: var(--cinza);
-  margin-bottom: 16px;
+  margin-bottom: 18px;
+  font-size: 0.95rem;
+  line-height: 1.7;
 }
 
 .cerveja-premios {
-  font-size: 0.9rem;
-  color: var(--texto);
+  font-size: 0.85rem;
+  color: #2b1e14;
+  background: linear-gradient(135deg, #fdf8ee, #f5edd8);
+  border: 1px solid rgba(201,162,77,0.3);
+  border-radius: 10px;
+  padding: 10px 16px;
+  display: inline-block;
+  margin-top: auto;
 }
 
 /* ================= RESPONSIVO ================= */
@@ -471,6 +515,7 @@ footer {
   max-width: 800px;
   margin: 0 auto;
   text-align: center;
+  padding: 20px 20px 10px;
 }
 
 .eventos-intro h2 {
@@ -488,6 +533,7 @@ footer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
+  padding: 10px 20px 60px;
 }
 
 .evento-card {
@@ -557,7 +603,7 @@ footer {
 }
 .eventos-header {
   background: #F8F5F0;
-  padding: 60px 20px;
+  padding: 36px 20px 20px;
   text-align: center;
   position: relative;
 }

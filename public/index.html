@@ -102,6 +102,10 @@
       <div id="sec-produtos" class="admin-section">
         <h2>Gerenciar Produtos</h2>
         <p class="secao-desc">Produtos exibidos na página Loja</p>
+        <button class="btn-admin secundario" onclick="importarProdutosOriginais()" style="margin-bottom:24px;">
+          📦 Importar produtos existentes da loja
+        </button>
+        <span id="import-ok" style="color:#4caf50;font-size:0.82rem;display:none;margin-left:12px;">✓ Produtos importados com sucesso!</span>
 
         <div class="admin-form">
           <h3>➕ Adicionar / Editar Produto</h3>
@@ -158,6 +162,10 @@
       <div id="sec-cervejas" class="admin-section">
         <h2>Gerenciar Cervejas</h2>
         <p class="secao-desc">Cervejas exibidas na página Cervejas</p>
+        <button class="btn-admin secundario" onclick="importarCervejasOriginais()" style="margin-bottom:24px;">
+          🍺 Importar cervejas existentes do site
+        </button>
+        <span id="import-cerv-ok" style="color:#4caf50;font-size:0.82rem;display:none;margin-left:12px;">✓ Cervejas importadas com sucesso!</span>
 
         <div class="admin-form">
           <h3>➕ Adicionar / Editar Cerveja</h3>
@@ -286,6 +294,19 @@
             </div>
           </div>
 
+          <div class="content-block">
+            <h3>🎬 Vídeo da Página Principal</h3>
+            <label>URL ou caminho do vídeo</label>
+            <input type="text" id="cb-video-src" placeholder="imagens/videos/video8.mp4 ou URL externa">
+            <label>Imagem de capa (poster) — opcional</label>
+            <input type="text" id="cb-video-poster" placeholder="imagens/pessoas/pessoas1.jpeg">
+            <p style="color:#666;font-size:0.78rem;margin-top:8px;">💡 Para vídeos do YouTube, cole a URL do arquivo .mp4 direto. Para vídeos locais, use o caminho relativo como acima.</p>
+            <div class="bloco-salvar">
+              <button class="btn-admin" onclick="salvarConteudo('video')">Salvar</button>
+              <span class="salvo-ok" id="ok-video">✓ Salvo! Recarregue a página para ver.</span>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -293,6 +314,10 @@
       <div id="sec-eventos" class="admin-section">
         <h2>Gerenciar Eventos</h2>
         <p class="secao-desc">Cards de eventos exibidos na página inicial</p>
+        <button class="btn-admin secundario" onclick="importarEventosOriginais()" style="margin-bottom:24px;">
+          🎉 Importar eventos existentes do site
+        </button>
+        <span id="import-ev-ok" style="color:#4caf50;font-size:0.82rem;display:none;margin-left:12px;">✓ Eventos importados com sucesso!</span>
 
         <div class="admin-form">
           <h3>➕ Adicionar / Editar Evento</h3>
@@ -398,13 +423,11 @@ em concursos nacionais, nosso espaço foi criado para receber, brindar e aprovei
   <h2>
     <span>Eventos e Experiências</span>
     <small>Dù Baú Cervejaria Artesanal</small>
-  </h2>
-</section>
+  </h2
+></section>
 
 <section class="eventos-intro">
-  <h2>Momentos que criamos juntos</h2>
-  <p>Nossa cervejaria é palco de encontros, brincadeiras, música ao vivo
-    e experiências que vão além da cerveja.</p>
+ <p></p>
 </section>
 
 <!-- Cards de eventos — dinâmicos via admin -->
@@ -461,8 +484,8 @@ em concursos nacionais, nosso espaço foi criado para receber, brindar e aprovei
 
 <section class="video-section">
   <div class="video-container">
-    <video controls poster="imagens/pessoas/pessoas1.jpeg">
-      <source src="imagens/videos/video8.mp4" type="video/mp4">
+    <video id="pub-video" controls poster="imagens/pessoas/pessoas1.jpeg">
+      <source id="pub-video-src" src="imagens/videos/video8.mp4" type="video/mp4">
     </video>
   </div>
 </section>
@@ -821,6 +844,8 @@ function carregarCamposConteudo() {
   set('cb-info2t', c.info2t); set('cb-info2p', c.info2p);
   set('cb-info3t', c.info3t); set('cb-info3p', c.info3p);
   set('cb-footer', c.footer);
+  set('cb-video-src', c.videoSrc);
+  set('cb-video-poster', c.videoPoster);
 }
 
 function salvarConteudo(bloco) {
@@ -839,6 +864,9 @@ function salvarConteudo(bloco) {
     c.info3t = gv('cb-info3t'); c.info3p = gv('cb-info3p');
   } else if (bloco === 'footer') {
     c.footer = gv('cb-footer');
+  } else if (bloco === 'video') {
+    c.videoSrc    = gv('cb-video-src');
+    c.videoPoster = gv('cb-video-poster');
   }
   setConteudo(c);
   aplicarConteudoPublico(c);
@@ -864,6 +892,13 @@ function aplicarConteudoPublico(c) {
     const ig = document.getElementById('pub-instagram-btn');
     if (ig) ig.href = c.instagram;
   }
+  if (c.videoSrc) {
+    const vid = document.getElementById('pub-video');
+    const src = document.getElementById('pub-video-src');
+    if (src) src.src = c.videoSrc;
+    if (c.videoPoster && vid) vid.poster = c.videoPoster;
+    if (vid) vid.load();
+  }
 }
 
 /* ——— EVENTOS PÚBLICOS DINÂMICOS ——— */
@@ -880,6 +915,230 @@ function renderEventosPub() {
         <a href="${ev.link || 'https://wa.me/5512997410925'}" class="btn">${ev.btn || 'Falar no WhatsApp'}</a>
       </div>
     </div>`).join('');
+}
+
+
+
+
+/* ——— IMPORTAR EVENTOS ORIGINAIS ——— */
+function importarEventosOriginais() {
+  const existentes = getEventos();
+  if (existentes.length > 0) {
+    if (!confirm('Já existem ' + existentes.length + ' evento(s) cadastrado(s). Deseja adicionar os originais sem duplicar?')) return;
+  }
+
+  const originais = [
+    {
+      titulo: 'Petiscos',
+      img: 'imagens/evento1.JPG',
+      desc: 'Os Mais Deliciosos Lanches.',
+      link: 'https://wa.me/5512997410925',
+      btn: 'Venha Conhecer!'
+    },
+    {
+      titulo: 'Jogos & Brincadeiras',
+      img: 'imagens/Marionetedechopp (1).jpeg',
+      desc: 'Jogos e desafios. Quer Agendar?',
+      link: 'https://wa.me/5512997410925',
+      btn: 'Falar no WhatsApp'
+    },
+    {
+      titulo: 'Eventos Temáticos',
+      img: 'imagens/pessoas/pessoa5.jpeg',
+      desc: 'Datas Comemorativas!',
+      link: 'https://wa.me/5512997410925',
+      btn: 'Falar no WhatsApp'
+    },
+    {
+      titulo: 'As melhores Cervejas',
+      img: 'imagens/cervejas/garrafas 30,00.jpeg',
+      desc: 'Comemore com cervejas especiais!',
+      link: 'loja.html',
+      btn: 'Ver Loja'
+    },
+    {
+      titulo: 'Itens Temáticos',
+      img: 'imagens/Loja/Camisetas 80,00 (2).jpeg',
+      desc: 'Produtos da Nossa Loja.',
+      link: 'loja.html',
+      btn: 'Ver Loja'
+    },
+    {
+      titulo: 'Quer agendar para grupo?',
+      img: 'imagens/Loja/copo stout 500ml 35,00.jpeg',
+      desc: 'Clima descontraído ao pôr do sol para curtir com família e amigos.',
+      link: 'https://wa.me/5512997410925',
+      btn: 'Agende no WhatsApp'
+    },
+  ];
+
+  const titulosExistentes = existentes.map(e => e.titulo.toLowerCase());
+  const novos = originais.filter(e => !titulosExistentes.includes(e.titulo.toLowerCase()));
+  const todos = existentes.concat(novos.map(e => ({ ...e, id: Date.now().toString() + Math.random().toString(36).slice(2) })));
+
+  setEventos(todos);
+  renderListaAdmin();
+  atualizarDashboard();
+  renderEventosPub();
+
+  const ok = document.getElementById('import-ev-ok');
+  ok.textContent = '✓ ' + novos.length + ' evento(s) importado(s) com sucesso!';
+  ok.style.display = 'inline';
+  setTimeout(() => { ok.style.display = 'none'; }, 4000);
+}
+
+/* ——— IMPORTAR CERVEJAS ORIGINAIS ——— */
+function importarCervejasOriginais() {
+  const existentes = getCervejas();
+  if (existentes.length > 0) {
+    if (!confirm('Já existem ' + existentes.length + ' cerveja(s) cadastrada(s). Deseja adicionar as originais sem duplicar?')) return;
+  }
+
+  const originais = [
+    {
+      nome: 'Dù Baú American Blond Ale',
+      estilo: 'American Blond Ale - Edição Limitada',
+      ibu: '17', alc: '4,5%', cor: 'Amarelo palha a dourada',
+      medalha: 'ouro',
+      desc: 'Premiada 1º Lugar no 5º Mestre Cervejeiro de Panela em 2025. Cerveja aromática, com notas cítricas e florais, mel de laranjeira, pães e um leve toque de maracujá.',
+      img: 'imagens/cervejas/blond-ale.jpeg',
+      premio: '🏆 Medalha de Ouro – Concurso Mestre Cervejeiro de Panela (2025)'
+    },
+    {
+      nome: 'Dù Baú American Blond Ale (2024)',
+      estilo: 'American Blond Ale - Edição Limitada',
+      ibu: '17', alc: '4,5%', cor: 'Amarelo palha e dourada',
+      medalha: 'prata',
+      desc: 'Premiada 2º Lugar no 4º Mestre Cervejeiro de Panela em 2024. Cerveja aromática, com notas cítricas e florais, mel de laranjeira, pães e um leve toque de maracujá.',
+      img: 'imagens/cervejas/blond-ale.jpeg',
+      premio: '🏆 Medalha de Prata – Concurso Mestre Cervejeiro de Panela (2024)'
+    },
+    {
+      nome: 'Dù Baú Italian Grape Ale de Chardonnay',
+      estilo: 'Chardonnay - Edição Limitada',
+      ibu: '', alc: '', cor: 'Amarelo palha e dourada',
+      medalha: 'prata',
+      desc: 'Notas de abacaxi, pera e maçã verde, panificação, brioche e miolo de pão. Características aromáticas provenientes da uva Chardonnay.',
+      img: 'imagens/cervejas/chardonnay1 (1).jpeg',
+      premio: '🏆 Medalha de Prata – Concurso Mestre Cervejeiro de Panela (2025)'
+    },
+    {
+      nome: 'Red Ale – Pedra Rubra',
+      estilo: 'Red Ale - Edição Limitada',
+      ibu: '', alc: '', cor: 'Rubi',
+      medalha: '',
+      desc: 'Cerveja de coloração avermelhada, com corpo médio e sabor marcante de malte, trazendo notas de caramelo e leve tostado. Possui amargor equilibrado e final suave.',
+      img: 'imagens/cervejas/Red Ale.jpeg',
+      premio: ''
+    },
+    {
+      nome: 'Dù Baú Weiss – Brisa da Mantiqueira',
+      estilo: 'Cerveja de Trigo - Brisa da Mantiqueira',
+      ibu: '10', alc: '5,0%', cor: 'Amarelo palha e dourada',
+      medalha: '',
+      desc: 'Cerveja de trigo clara, leve e refrescante, com espuma cremosa e abundante. Aromas frutados que lembram banana e leve nota de cravo, com amargor suave e final macio.',
+      img: 'imagens/cervejas/weiss brisa da mantiqueira.jpeg',
+      premio: ''
+    },
+    {
+      nome: 'Dù Baú Pilsen – Cristal da Serra',
+      estilo: 'Pilsen',
+      ibu: '12', alc: '4,5%', cor: 'Amarelo turvo',
+      medalha: '',
+      desc: 'Cerveja clara, leve e refrescante, com coloração dourada e espuma cremosa. Possui amargor suave e sabor equilibrado de malte e lúpulo, perfeita para quem aprecia uma Pilsen clássica.',
+      img: 'imagens/cervejas/pilsen cristal da serra.jpeg',
+      premio: ''
+    },
+    {
+      nome: 'Dù Baú Session IPA – Sombra da Pedra',
+      estilo: 'Session IPA',
+      ibu: '37', alc: '5%', cor: 'Amarelo turvo',
+      medalha: '',
+      desc: 'Cerveja clara, leve e muito aromática. Destaca notas cítricas e frutadas dos lúpulos, com amargor equilibrado e alta refrescância. Uma IPA mais leve, fácil de beber e cheia de sabor.',
+      img: 'imagens/cervejas/session ipa sombra da pedra.jpeg',
+      premio: '🏆 Medalha de Prata – Festival Paulista de Cervejas (2023)'
+    },
+    {
+      nome: 'Dù Baú Italian Grape Ale em Autólise',
+      estilo: 'Edição Especial - Edição Limitada',
+      ibu: '', alc: '', cor: 'Amarelo palha',
+      medalha: '',
+      desc: 'Refrescante e aromática, com notas de banana e cravo. Uma cerveja leve, perfeita para dias quentes e encontros descontraídos.',
+      img: 'imagens/cervejas/italian grape ale autolise.jpeg',
+      premio: '🏆 Medalha de Prata – Festival Paulista de Cervejas (2023)'
+    },
+    {
+      nome: 'Dù Baú Hidromel Valhala',
+      estilo: 'Bebida Especial',
+      ibu: '', alc: '12%', cor: 'Amarelo turvo',
+      medalha: '',
+      desc: 'Néctar dos Deuses, bebida milenar que ficou famosa entre os povos Nórdicos e Celtas. Hidromel é a bebida mais antiga do mundo, sua existência antecede a cerveja e o vinho.',
+      img: 'imagens/cervejas/hidromel valhala.jpeg',
+      premio: ''
+    },
+  ];
+
+  // Evita duplicar pelo nome
+  const nomesExistentes = existentes.map(c => c.nome.toLowerCase());
+  const novas = originais.filter(c => !nomesExistentes.includes(c.nome.toLowerCase()));
+  const todas = existentes.concat(novas.map(c => ({ ...c, id: Date.now().toString() + Math.random().toString(36).slice(2) })));
+
+  setCervejas(todas);
+  renderListaAdmin();
+  atualizarDashboard();
+
+  const ok = document.getElementById('import-cerv-ok');
+  ok.textContent = '✓ ' + novas.length + ' cerveja(s) importada(s) com sucesso!';
+  ok.style.display = 'inline';
+  setTimeout(() => { ok.style.display = 'none'; }, 4000);
+}
+
+/* ——— IMPORTAR PRODUTOS ORIGINAIS DA LOJA ——— */
+function importarProdutosOriginais() {
+  const existentes = getProdutos();
+  if (existentes.length > 0) {
+    if (!confirm('Já existem ' + existentes.length + ' produto(s) cadastrados. Deseja adicionar os originais sem duplicar?')) return;
+  }
+
+  const whatsapp = '5512997410925';
+  const originais = [
+    { nome: 'Red Ale', preco: 'R$ 30,00', sub: '500ml', cat: 'cervejas', img: 'imagens/cervejas/Red Ale.jpeg', btn: 'Pedir no WhatsApp' },
+    { nome: 'Blond Ale', preco: 'R$ 30,00', sub: '500ml', cat: 'cervejas', img: 'imagens/cervejas/blond-ale.jpeg', btn: 'Pedir no WhatsApp' },
+    { nome: 'American IPA – Vale dos Ventos', preco: 'R$ 30,00', sub: 'Vale dos Ventos', cat: 'cervejas', img: 'imagens/cervejas/american ipa vale dos ventos.jpeg', btn: 'Reservar' },
+    { nome: 'Weiss – Brisa da Mantiqueira', preco: 'R$ 30,00', sub: 'Brisa da Mantiqueira', cat: 'cervejas', img: 'imagens/cervejas/weiss brisa da mantiqueira.jpeg', btn: 'Reserve no WhatsApp' },
+    { nome: 'Session IPA – Sombra da Pedra', preco: 'R$ 30,00', sub: 'Sombra da pedra', cat: 'cervejas', img: 'imagens/cervejas/session ipa sombra da pedra.jpeg', btn: 'Reservar' },
+    { nome: 'Pilsen – Cristal da Serra', preco: 'R$ 30,00', sub: 'Cristal da Serra', cat: 'cervejas', img: 'imagens/cervejas/pilsen cristal da serra.jpeg', btn: 'Reservar' },
+    { nome: 'Hidromel Valhala', preco: 'R$ 120,00', sub: 'Bebida Especial', cat: 'especiais', img: 'imagens/cervejas/hidromel valhala.jpeg', btn: 'Reservar' },
+    { nome: 'Italian Grape Ale – Edição Limitada', preco: 'Edição Limitada', sub: 'Edição Limitada', cat: 'especiais', img: 'imagens/cervejas/italian grape ale autolise.jpeg', btn: 'Reserve no WhatsApp' },
+    { nome: 'Abridor de Garrafa', preco: 'R$ 15,00', sub: '', cat: 'acessorios', img: 'imagens/Loja/abridor de garrafa 15,00.jpeg', btn: 'Reservar' },
+    { nome: 'Chaveiro Barril', preco: 'R$ 20,00', sub: '', cat: 'acessorios', img: 'imagens/Loja/Chaveiro Barril 20,00.jpeg', btn: 'Reserve no WhatsApp' },
+    { nome: 'Boné Du Baú', preco: 'R$ 65,00', sub: '', cat: 'vestuario', img: 'imagens/Loja/Boné (10).jpg', btn: 'Reserve no WhatsApp' },
+    { nome: 'Chaveiro Chapéu', preco: 'R$ 20,00', sub: '', cat: 'acessorios', img: 'imagens/Loja/chapeu chaveiro (2).jpeg', btn: 'Reserve no WhatsApp' },
+    { nome: 'Camiseta Du Baú (1)', preco: 'R$ 80,00', sub: '', cat: 'vestuario', img: 'imagens/Loja/Camisetas 80,00 (1).jpeg', btn: 'Reserve no WhatsApp' },
+    { nome: 'Camiseta Du Baú (2)', preco: 'R$ 80,00', sub: '', cat: 'vestuario', img: 'imagens/Loja/Camisetas 80,00 (2).jpeg', btn: 'Reserve no WhatsApp' },
+    { nome: 'Camiseta Du Baú (3)', preco: 'R$ 80,00', sub: '', cat: 'vestuario', img: 'imagens/Loja/Camisetas 80,00 (4).jpeg', btn: 'Reserve no WhatsApp' },
+    { nome: 'Camiseta Du Baú (4)', preco: 'R$ 80,00', sub: '', cat: 'vestuario', img: 'imagens/Loja/Camisetas 80,00 (5).jpeg', btn: 'Reserve no WhatsApp' },
+    { nome: 'Camiseta Du Baú (5)', preco: 'R$ 80,00', sub: '', cat: 'vestuario', img: 'imagens/Loja/Camisetas 80,00 (6).jpeg', btn: 'Reserve no WhatsApp' },
+    { nome: 'Camiseta Du Baú (6)', preco: 'R$ 80,00', sub: '', cat: 'vestuario', img: 'imagens/Loja/Camisetas 80,00 (7).jpeg', btn: 'Reserve no WhatsApp' },
+    { nome: 'Camiseta Du Baú (7)', preco: 'R$ 80,00', sub: '', cat: 'vestuario', img: 'imagens/Loja/Camisetas 80,00 (8).jpeg', btn: 'Reserve no WhatsApp' },
+    { nome: 'Caneca Stout 340ml', preco: 'R$ 45,00', sub: '340ml', cat: 'copos', img: 'imagens/Loja/caneca 340ml 45,00.jpeg', btn: 'Reserve no WhatsApp' },
+    { nome: 'Copo Caldereta', preco: 'R$ 30,00', sub: '', cat: 'copos', img: 'imagens/Loja/copo caldereta 30,00 (1).jpeg', btn: 'Reserve no WhatsApp' },
+    { nome: 'Caneca Stout 500ml', preco: 'R$ 35,00', sub: '500ml', cat: 'copos', img: 'imagens/Loja/copo stout 500ml 35,00.jpeg', btn: 'Reserve no WhatsApp' },
+  ];
+
+  // Evita duplicar pelo nome
+  const nomesExistentes = existentes.map(p => p.nome.toLowerCase());
+  const novos = originais.filter(p => !nomesExistentes.includes(p.nome.toLowerCase()));
+  const todos = existentes.concat(novos.map(p => ({ ...p, id: Date.now().toString() + Math.random().toString(36).slice(2) })));
+
+  setProdutos(todos);
+  renderListaAdmin();
+  atualizarDashboard();
+
+  const ok = document.getElementById('import-ok');
+  ok.textContent = '✓ ' + novos.length + ' produto(s) importado(s) com sucesso!';
+  ok.style.display = 'inline';
+  setTimeout(() => { ok.style.display = 'none'; }, 4000);
 }
 
 /* ——— INICIALIZAÇÃO ——— */
