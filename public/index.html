@@ -44,6 +44,7 @@
         <a href="#" onclick="adminNav('cervejas',this)"><span class="icon">🍺</span> Cervejas</a>
         <a href="#" onclick="adminNav('conteudo',this)"><span class="icon">✏️</span> Conteúdo</a>
         <a href="#" onclick="adminNav('eventos',this)"><span class="icon">🎉</span> Eventos</a>
+        <a href="#" onclick="adminNav('imagens',this)"><span class="icon">🖼️</span> Imagens</a>
       </div>
       <div class="sidebar-sair">
         <button onclick="adminSair()">⬅ Sair do Admin</button>
@@ -139,13 +140,33 @@
           <div class="form-row full">
             <div class="form-group">
               <label>URL da Imagem</label>
-              <input type="text" id="prod-img" placeholder="imagens/Loja/produto.jpeg ou URL externa">
-            <div style="background:#1e2a1e;border:1px solid #2a4a2a;border-radius:8px;padding:12px 16px;margin-top:6px;font-size:0.78rem;color:#7dba7d;line-height:1.7;">
-              💡 <strong style="color:#a0d4a0;">Como usar imagem do Google Drive:</strong><br>
-              1. Clique com botão direito na imagem → <em>Compartilhar</em> → <em>Qualquer pessoa com o link</em><br>
-              2. Copie o link. Ele será assim: <code style="background:#0a1a0a;padding:2px 6px;border-radius:4px;">drive.google.com/file/d/<strong>ID_AQUI</strong>/view</code><br>
-              3. Monte o link final: <code style="background:#0a1a0a;padding:2px 6px;border-radius:4px;">https://drive.google.com/uc?export=view&id=<strong>ID_AQUI</strong></code><br>
-              4. Cole o link final no campo acima e salve.
+              <input type="text" id="prod-img-display" placeholder="imagens/Loja/produto.jpeg" style="display:none">
+            <div class="img-widget" id="widget-prod-img">
+              <div class="img-widget-btns">
+                <button type="button" class="img-btn-drive" onclick="toggleDriveInput('prod-img')">
+                  📁 Google Drive
+                </button>
+                <label class="img-btn-celular">
+                  📱 Foto do celular
+                  <input type="file" accept="image/*" capture="environment" style="display:none" onchange="handleCelularUpload('prod-img', this)">
+                </label>
+              </div>
+
+              <div class="img-drive-input" id="drive-box-prod-img" style="display:none;">
+                <input type="text" id="drive-raw-prod-img" placeholder="Cole o link do Google Drive aqui">
+                <button type="button" onclick="converterEAplicarDrive('prod-img')">Usar esta foto</button>
+                <span id="drive-erro-prod-img" style="color:#e55;font-size:0.75rem;display:none;">Link inválido. Copie o link completo do Drive.</span>
+              </div>
+
+              <div class="img-widget-preview" id="prev-box-prod-img" style="display:none;">
+                <img id="prev-img-prod-img" src="" alt="preview">
+                <div class="prev-info">
+                  <span id="prev-nome-prod-img"></span>
+                  <button type="button" onclick="removerFimg('prod-img')">✕ Remover</button>
+                </div>
+              </div>
+
+              <input type="hidden" id="prod-img">
             </div>
             </div>
           </div>
@@ -221,13 +242,33 @@
           <div class="form-row">
             <div class="form-group">
               <label>URL da Imagem</label>
-              <input type="text" id="cerv-img" placeholder="imagens/cervejas/blond-ale.jpeg">
-            <div style="background:#1e2a1e;border:1px solid #2a4a2a;border-radius:8px;padding:12px 16px;margin-top:6px;font-size:0.78rem;color:#7dba7d;line-height:1.7;">
-              💡 <strong style="color:#a0d4a0;">Como usar imagem do Google Drive:</strong><br>
-              1. Clique com botão direito na imagem → <em>Compartilhar</em> → <em>Qualquer pessoa com o link</em><br>
-              2. Copie o link. Ele será assim: <code style="background:#0a1a0a;padding:2px 6px;border-radius:4px;">drive.google.com/file/d/<strong>ID_AQUI</strong>/view</code><br>
-              3. Monte o link final: <code style="background:#0a1a0a;padding:2px 6px;border-radius:4px;">https://drive.google.com/uc?export=view&id=<strong>ID_AQUI</strong></code><br>
-              4. Cole o link final no campo acima e salve.
+              <input type="text" id="cerv-img-display" placeholder="imagens/cervejas/..." style="display:none">
+            <div class="img-widget" id="widget-cerv-img">
+              <div class="img-widget-btns">
+                <button type="button" class="img-btn-drive" onclick="toggleDriveInput('cerv-img')">
+                  📁 Google Drive
+                </button>
+                <label class="img-btn-celular">
+                  📱 Foto do celular
+                  <input type="file" accept="image/*" capture="environment" style="display:none" onchange="handleCelularUpload('cerv-img', this)">
+                </label>
+              </div>
+
+              <div class="img-drive-input" id="drive-box-cerv-img" style="display:none;">
+                <input type="text" id="drive-raw-cerv-img" placeholder="Cole o link do Google Drive aqui">
+                <button type="button" onclick="converterEAplicarDrive('cerv-img')">Usar esta foto</button>
+                <span id="drive-erro-cerv-img" style="color:#e55;font-size:0.75rem;display:none;">Link inválido. Copie o link completo do Drive.</span>
+              </div>
+
+              <div class="img-widget-preview" id="prev-box-cerv-img" style="display:none;">
+                <img id="prev-img-cerv-img" src="" alt="preview">
+                <div class="prev-info">
+                  <span id="prev-nome-cerv-img"></span>
+                  <button type="button" onclick="removerFimg('cerv-img')">✕ Remover</button>
+                </div>
+              </div>
+
+              <input type="hidden" id="cerv-img">
             </div>
             </div>
             <div class="form-group">
@@ -310,18 +351,60 @@
 
           <div class="content-block">
             <h3>🎬 Vídeo da Página Principal</h3>
-            <label>URL ou caminho do vídeo</label>
-            <input type="text" id="cb-video-src" placeholder="imagens/videos/video8.mp4 ou URL externa">
-            <label>Imagem de capa (poster) — opcional</label>
-            <input type="text" id="cb-video-poster" placeholder="imagens/pessoas/pessoas1.jpeg">
-            <p style="color:#666;font-size:0.78rem;margin-top:8px;">💡 Para vídeos locais, use o caminho relativo. Para hospedar no Drive, use o mesmo processo abaixo.</p>
-            <div style="background:#1e2a1e;border:1px solid #2a4a2a;border-radius:8px;padding:12px 16px;margin-top:6px;font-size:0.78rem;color:#7dba7d;line-height:1.7;">
-              💡 <strong style="color:#a0d4a0;">Como usar imagem do Google Drive:</strong><br>
-              1. Clique com botão direito na imagem → <em>Compartilhar</em> → <em>Qualquer pessoa com o link</em><br>
-              2. Copie o link. Ele será assim: <code style="background:#0a1a0a;padding:2px 6px;border-radius:4px;">drive.google.com/file/d/<strong>ID_AQUI</strong>/view</code><br>
-              3. Monte o link final: <code style="background:#0a1a0a;padding:2px 6px;border-radius:4px;">https://drive.google.com/uc?export=view&id=<strong>ID_AQUI</strong></code><br>
-              4. Cole o link final no campo acima e salve.
+            <label>Vídeo da página principal</label>
+            <div class="img-widget" id="widget-cb-video-src">
+              <div class="img-widget-btns">
+                <button type="button" class="img-btn-drive" onclick="toggleDriveInput('cb-video-src')">
+                  📁 Google Drive
+                </button>
+                <label class="img-btn-celular">
+                  📱 Vídeo do celular / PC
+                  <input type="file" accept="video/*" style="display:none" onchange="handleCelularUpload('cb-video-src', this)">
+                </label>
+              </div>
+              <div class="img-drive-input" id="drive-box-cb-video-src" style="display:none;">
+                <input type="text" id="drive-raw-cb-video-src" placeholder="Cole o link do Google Drive aqui">
+                <button type="button" onclick="converterEAplicarDrive('cb-video-src')">Usar este vídeo</button>
+                <span id="drive-erro-cb-video-src" style="color:#e55;font-size:0.75rem;display:none;">Link inválido. Copie o link completo do Drive.</span>
+              </div>
+              <div class="img-widget-preview" id="prev-box-cb-video-src" style="display:none;">
+                <div style="width:70px;height:70px;background:#222;border-radius:8px;border:1px solid #333;display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;">🎬</div>
+                <div class="prev-info">
+                  <span id="prev-nome-cb-video-src"></span>
+                  <button type="button" onclick="removerFimg('cb-video-src')">✕ Remover</button>
+                </div>
+              </div>
+              <input type="hidden" id="cb-video-src">
             </div>
+            <label>Imagem de capa (poster) — opcional</label>
+            <div class="img-widget" id="widget-cb-video-poster">
+              <div class="img-widget-btns">
+                <button type="button" class="img-btn-drive" onclick="toggleDriveInput('cb-video-poster')">
+                  📁 Google Drive
+                </button>
+                <label class="img-btn-celular">
+                  📱 Foto do celular
+                  <input type="file" accept="image/*" capture="environment" style="display:none" onchange="handleCelularUpload('cb-video-poster', this)">
+                </label>
+              </div>
+
+              <div class="img-drive-input" id="drive-box-cb-video-poster" style="display:none;">
+                <input type="text" id="drive-raw-cb-video-poster" placeholder="Cole o link do Google Drive aqui">
+                <button type="button" onclick="converterEAplicarDrive('cb-video-poster')">Usar esta foto</button>
+                <span id="drive-erro-cb-video-poster" style="color:#e55;font-size:0.75rem;display:none;">Link inválido. Copie o link completo do Drive.</span>
+              </div>
+
+              <div class="img-widget-preview" id="prev-box-cb-video-poster" style="display:none;">
+                <img id="prev-img-cb-video-poster" src="" alt="preview">
+                <div class="prev-info">
+                  <span id="prev-nome-cb-video-poster"></span>
+                  <button type="button" onclick="removerFimg('cb-video-poster')">✕ Remover</button>
+                </div>
+              </div>
+
+              <input type="hidden" id="cb-video-poster">
+            </div>
+            
             <div class="bloco-salvar">
               <button class="btn-admin" onclick="salvarConteudo('video')">Salvar</button>
               <span class="salvo-ok" id="ok-video">✓ Salvo! Recarregue a página para ver.</span>
@@ -350,13 +433,33 @@
             </div>
             <div class="form-group">
               <label>URL da Imagem</label>
-              <input type="text" id="ev-img" placeholder="imagens/evento1.JPG">
-            <div style="background:#1e2a1e;border:1px solid #2a4a2a;border-radius:8px;padding:12px 16px;margin-top:6px;font-size:0.78rem;color:#7dba7d;line-height:1.7;">
-              💡 <strong style="color:#a0d4a0;">Como usar imagem do Google Drive:</strong><br>
-              1. Clique com botão direito na imagem → <em>Compartilhar</em> → <em>Qualquer pessoa com o link</em><br>
-              2. Copie o link. Ele será assim: <code style="background:#0a1a0a;padding:2px 6px;border-radius:4px;">drive.google.com/file/d/<strong>ID_AQUI</strong>/view</code><br>
-              3. Monte o link final: <code style="background:#0a1a0a;padding:2px 6px;border-radius:4px;">https://drive.google.com/uc?export=view&id=<strong>ID_AQUI</strong></code><br>
-              4. Cole o link final no campo acima e salve.
+              <input type="text" id="ev-img-display" placeholder="imagens/evento1.JPG" style="display:none">
+            <div class="img-widget" id="widget-ev-img">
+              <div class="img-widget-btns">
+                <button type="button" class="img-btn-drive" onclick="toggleDriveInput('ev-img')">
+                  📁 Google Drive
+                </button>
+                <label class="img-btn-celular">
+                  📱 Foto do celular
+                  <input type="file" accept="image/*" capture="environment" style="display:none" onchange="handleCelularUpload('ev-img', this)">
+                </label>
+              </div>
+
+              <div class="img-drive-input" id="drive-box-ev-img" style="display:none;">
+                <input type="text" id="drive-raw-ev-img" placeholder="Cole o link do Google Drive aqui">
+                <button type="button" onclick="converterEAplicarDrive('ev-img')">Usar esta foto</button>
+                <span id="drive-erro-ev-img" style="color:#e55;font-size:0.75rem;display:none;">Link inválido. Copie o link completo do Drive.</span>
+              </div>
+
+              <div class="img-widget-preview" id="prev-box-ev-img" style="display:none;">
+                <img id="prev-img-ev-img" src="" alt="preview">
+                <div class="prev-info">
+                  <span id="prev-nome-ev-img"></span>
+                  <button type="button" onclick="removerFimg('ev-img')">✕ Remover</button>
+                </div>
+              </div>
+
+              <input type="hidden" id="ev-img">
             </div>
             </div>
           </div>
@@ -383,6 +486,993 @@
         <div class="admin-tabela">
           <h3>🎉 Eventos Cadastrados</h3>
           <ul class="tabela-lista" id="lista-eventos-admin"></ul>
+        </div>
+      </div>
+
+      <!-- IMAGENS -->
+      <div id="sec-imagens" class="admin-section">
+        <h2>🖼️ Imagens do Site</h2>
+        <p class="secao-desc">Troque qualquer imagem fixa das páginas sem abrir o VS Code</p>
+        <div class="admin-form" style="padding:24px;">
+          <div style="background:#1e2a1e;border:1px solid #2a4a2a;border-radius:10px;padding:14px 18px;margin-bottom:24px;font-size:0.8rem;color:#7dba7d;line-height:1.7;">
+            💡 <strong style="color:#a0d4a0;">Como trocar uma imagem:</strong> Cole a URL no campo, ou clique 📁 para converter link do Drive, ou 📱 para enviar do celular/PC. Depois clique <strong>💾 Salvar</strong>.
+          </div>
+          
+          <div style="margin-bottom:28px;">
+            <h3 style="color:#c9a24d;font-size:0.9rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #2a2a2a;">🏠 Página Inicial</h3>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;">
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_espaco4_jpeg" src="imagens/espaco4.jpeg" alt="espaco4" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/espaco4.jpeg">espaco4</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_espaco4_jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_espaco4_jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_espaco4_jpeg','imagens/espaco4.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_espaco4_jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_espaco4_jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_espaco4_jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_espaco4_jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_espaco4_jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_espaco_8torneiras_jpg" src="imagens/espaco/8torneiras.jpg" alt="8torneiras" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/espaco/8torneiras.jpg">8torneiras</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_espaco_8torneiras_jpg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_espaco_8torneiras_jpg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_espaco_8torneiras_jpg','imagens/espaco/8torneiras.jpg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_espaco_8torneiras_jpg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_espaco_8torneiras_jpg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_espaco_8torneiras_jpg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_espaco_8torneiras_jpg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_espaco_8torneiras_jpg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_espaco_espaco2___copia_jpeg" src="imagens/espaco/espaco2 - Copia.jpeg" alt="espaco2 - Copia" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/espaco/espaco2 - Copia.jpeg">espaco2 - Copia</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_espaco_espaco2___copia_jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_espaco_espaco2___copia_jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_espaco_espaco2___copia_jpeg','imagens/espaco/espaco2 - Copia.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_espaco_espaco2___copia_jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_espaco_espaco2___copia_jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_espaco_espaco2___copia_jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_espaco_espaco2___copia_jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_espaco_espaco2___copia_jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_evento1_jpg" src="imagens/evento1.JPG" alt="evento1" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/evento1.JPG">evento1</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_evento1_jpg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_evento1_jpg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_evento1_jpg','imagens/evento1.JPG')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_evento1_jpg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_evento1_jpg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_evento1_jpg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_evento1_jpg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_evento1_jpg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_marionetedechopp__1__jpeg" src="imagens/Marionetedechopp (1).jpeg" alt="Marionetedechopp (1)" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/Marionetedechopp (1).jpeg">Marionetedechopp (1)</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_marionetedechopp__1__jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_marionetedechopp__1__jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_marionetedechopp__1__jpeg','imagens/Marionetedechopp (1).jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_marionetedechopp__1__jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_marionetedechopp__1__jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_marionetedechopp__1__jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_marionetedechopp__1__jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_marionetedechopp__1__jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_pessoas_pessoa5_jpeg" src="imagens/pessoas/pessoa5.jpeg" alt="pessoa5" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/pessoas/pessoa5.jpeg">pessoa5</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_pessoas_pessoa5_jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_pessoas_pessoa5_jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_pessoas_pessoa5_jpeg','imagens/pessoas/pessoa5.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_pessoas_pessoa5_jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_pessoas_pessoa5_jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_pessoas_pessoa5_jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_pessoas_pessoa5_jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_pessoas_pessoa5_jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_cervejas_garrafas_30_00_jpeg" src="imagens/cervejas/garrafas 30,00.jpeg" alt="garrafas 30,00" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/cervejas/garrafas 30,00.jpeg">garrafas 30,00</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_cervejas_garrafas_30_00_jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_cervejas_garrafas_30_00_jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_cervejas_garrafas_30_00_jpeg','imagens/cervejas/garrafas 30,00.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_cervejas_garrafas_30_00_jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_cervejas_garrafas_30_00_jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_cervejas_garrafas_30_00_jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_cervejas_garrafas_30_00_jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_cervejas_garrafas_30_00_jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_loja_camisetas_80_00__2__jpeg" src="imagens/Loja/Camisetas 80,00 (2).jpeg" alt="Camisetas 80,00 (2)" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/Loja/Camisetas 80,00 (2).jpeg">Camisetas 80,00 (2)</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_loja_camisetas_80_00__2__jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_loja_camisetas_80_00__2__jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_loja_camisetas_80_00__2__jpeg','imagens/Loja/Camisetas 80,00 (2).jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_loja_camisetas_80_00__2__jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_loja_camisetas_80_00__2__jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_loja_camisetas_80_00__2__jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_loja_camisetas_80_00__2__jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_loja_camisetas_80_00__2__jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_loja_copo_stout_500ml_35_00_jpeg" src="imagens/Loja/copo stout 500ml 35,00.jpeg" alt="copo stout 500ml 35,00" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/Loja/copo stout 500ml 35,00.jpeg">copo stout 500ml 35,00</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_loja_copo_stout_500ml_35_00_jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_loja_copo_stout_500ml_35_00_jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_loja_copo_stout_500ml_35_00_jpeg','imagens/Loja/copo stout 500ml 35,00.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_loja_copo_stout_500ml_35_00_jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_loja_copo_stout_500ml_35_00_jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_loja_copo_stout_500ml_35_00_jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_loja_copo_stout_500ml_35_00_jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_loja_copo_stout_500ml_35_00_jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_cervejas_blond_ale_jpeg" src="imagens/cervejas/blond-ale.jpeg" alt="blond-ale" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/cervejas/blond-ale.jpeg">blond-ale</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_cervejas_blond_ale_jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_cervejas_blond_ale_jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_cervejas_blond_ale_jpeg','imagens/cervejas/blond-ale.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_cervejas_blond_ale_jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_cervejas_blond_ale_jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_cervejas_blond_ale_jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_cervejas_blond_ale_jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_cervejas_blond_ale_jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-bottom:28px;">
+            <h3 style="color:#c9a24d;font-size:0.9rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #2a2a2a;">🍺 Página Cervejas</h3>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;">
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_cervejas_blond_ale_jpeg" src="imagens/cervejas/blond-ale.jpeg" alt="blond-ale" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/cervejas/blond-ale.jpeg">blond-ale</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_cervejas_blond_ale_jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_cervejas_blond_ale_jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_cervejas_blond_ale_jpeg','imagens/cervejas/blond-ale.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_cervejas_blond_ale_jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_cervejas_blond_ale_jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_cervejas_blond_ale_jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_cervejas_blond_ale_jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_cervejas_blond_ale_jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_cervejas_chardonnay1__1__jpeg" src="imagens/cervejas/chardonnay1 (1).jpeg" alt="chardonnay1 (1)" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/cervejas/chardonnay1 (1).jpeg">chardonnay1 (1)</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_cervejas_chardonnay1__1__jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_cervejas_chardonnay1__1__jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_cervejas_chardonnay1__1__jpeg','imagens/cervejas/chardonnay1 (1).jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_cervejas_chardonnay1__1__jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_cervejas_chardonnay1__1__jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_cervejas_chardonnay1__1__jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_cervejas_chardonnay1__1__jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_cervejas_chardonnay1__1__jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_cervejas_red_ale_jpeg" src="imagens/cervejas/Red Ale.jpeg" alt="Red Ale" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/cervejas/Red Ale.jpeg">Red Ale</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_cervejas_red_ale_jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_cervejas_red_ale_jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_cervejas_red_ale_jpeg','imagens/cervejas/Red Ale.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_cervejas_red_ale_jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_cervejas_red_ale_jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_cervejas_red_ale_jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_cervejas_red_ale_jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_cervejas_red_ale_jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_cervejas_weiss_brisa_da_mantique" src="imagens/cervejas/weiss brisa da mantiqueira.jpeg" alt="weiss brisa da mantiqueira" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/cervejas/weiss brisa da mantiqueira.jpeg">weiss brisa da mantiqueira</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_cervejas_weiss_brisa_da_mantique" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_cervejas_weiss_brisa_da_mantique')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_cervejas_weiss_brisa_da_mantique','imagens/cervejas/weiss brisa da mantiqueira.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_cervejas_weiss_brisa_da_mantique')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_cervejas_weiss_brisa_da_mantique',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_cervejas_weiss_brisa_da_mantique" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_cervejas_weiss_brisa_da_mantique" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_cervejas_weiss_brisa_da_mantique')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_cervejas_pilsen_cristal_da_serra" src="imagens/cervejas/pilsen cristal da serra.jpeg" alt="pilsen cristal da serra" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/cervejas/pilsen cristal da serra.jpeg">pilsen cristal da serra</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_cervejas_pilsen_cristal_da_serra" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_cervejas_pilsen_cristal_da_serra')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_cervejas_pilsen_cristal_da_serra','imagens/cervejas/pilsen cristal da serra.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_cervejas_pilsen_cristal_da_serra')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_cervejas_pilsen_cristal_da_serra',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_cervejas_pilsen_cristal_da_serra" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_cervejas_pilsen_cristal_da_serra" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_cervejas_pilsen_cristal_da_serra')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_cervejas_session_ipa_sombra_da_p" src="imagens/cervejas/session ipa sombra da pedra.jpeg" alt="session ipa sombra da pedra" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/cervejas/session ipa sombra da pedra.jpeg">session ipa sombra da pedra</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_cervejas_session_ipa_sombra_da_p" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_cervejas_session_ipa_sombra_da_p')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_cervejas_session_ipa_sombra_da_p','imagens/cervejas/session ipa sombra da pedra.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_cervejas_session_ipa_sombra_da_p')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_cervejas_session_ipa_sombra_da_p',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_cervejas_session_ipa_sombra_da_p" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_cervejas_session_ipa_sombra_da_p" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_cervejas_session_ipa_sombra_da_p')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_cervejas_italian_grape_ale_autol" src="imagens/cervejas/italian grape ale autolise.jpeg" alt="italian grape ale autolise" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/cervejas/italian grape ale autolise.jpeg">italian grape ale autolise</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_cervejas_italian_grape_ale_autol" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_cervejas_italian_grape_ale_autol')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_cervejas_italian_grape_ale_autol','imagens/cervejas/italian grape ale autolise.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_cervejas_italian_grape_ale_autol')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_cervejas_italian_grape_ale_autol',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_cervejas_italian_grape_ale_autol" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_cervejas_italian_grape_ale_autol" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_cervejas_italian_grape_ale_autol')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_cervejas_hidromel_valhala_jpeg" src="imagens/cervejas/hidromel valhala.jpeg" alt="hidromel valhala" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/cervejas/hidromel valhala.jpeg">hidromel valhala</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_cervejas_hidromel_valhala_jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_cervejas_hidromel_valhala_jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_cervejas_hidromel_valhala_jpeg','imagens/cervejas/hidromel valhala.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_cervejas_hidromel_valhala_jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_cervejas_hidromel_valhala_jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_cervejas_hidromel_valhala_jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_cervejas_hidromel_valhala_jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_cervejas_hidromel_valhala_jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-bottom:28px;">
+            <h3 style="color:#c9a24d;font-size:0.9rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #2a2a2a;">🛍️ Página Loja</h3>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;">
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_cervejas_red_ale_jpeg" src="imagens/cervejas/Red Ale.jpeg" alt="Red Ale" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/cervejas/Red Ale.jpeg">Red Ale</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_cervejas_red_ale_jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_cervejas_red_ale_jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_cervejas_red_ale_jpeg','imagens/cervejas/Red Ale.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_cervejas_red_ale_jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_cervejas_red_ale_jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_cervejas_red_ale_jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_cervejas_red_ale_jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_cervejas_red_ale_jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_cervejas_blond_ale_jpeg" src="imagens/cervejas/blond-ale.jpeg" alt="blond-ale" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/cervejas/blond-ale.jpeg">blond-ale</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_cervejas_blond_ale_jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_cervejas_blond_ale_jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_cervejas_blond_ale_jpeg','imagens/cervejas/blond-ale.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_cervejas_blond_ale_jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_cervejas_blond_ale_jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_cervejas_blond_ale_jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_cervejas_blond_ale_jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_cervejas_blond_ale_jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_cervejas_american_ipa_vale_dos_v" src="imagens/cervejas/american ipa vale dos ventos.jpeg" alt="american ipa vale dos ventos" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/cervejas/american ipa vale dos ventos.jpeg">american ipa vale dos ventos</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_cervejas_american_ipa_vale_dos_v" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_cervejas_american_ipa_vale_dos_v')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_cervejas_american_ipa_vale_dos_v','imagens/cervejas/american ipa vale dos ventos.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_cervejas_american_ipa_vale_dos_v')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_cervejas_american_ipa_vale_dos_v',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_cervejas_american_ipa_vale_dos_v" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_cervejas_american_ipa_vale_dos_v" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_cervejas_american_ipa_vale_dos_v')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_cervejas_weiss_brisa_da_mantique" src="imagens/cervejas/weiss brisa da mantiqueira.jpeg" alt="weiss brisa da mantiqueira" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/cervejas/weiss brisa da mantiqueira.jpeg">weiss brisa da mantiqueira</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_cervejas_weiss_brisa_da_mantique" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_cervejas_weiss_brisa_da_mantique')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_cervejas_weiss_brisa_da_mantique','imagens/cervejas/weiss brisa da mantiqueira.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_cervejas_weiss_brisa_da_mantique')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_cervejas_weiss_brisa_da_mantique',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_cervejas_weiss_brisa_da_mantique" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_cervejas_weiss_brisa_da_mantique" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_cervejas_weiss_brisa_da_mantique')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_cervejas_session_ipa_sombra_da_p" src="imagens/cervejas/session ipa sombra da pedra.jpeg" alt="session ipa sombra da pedra" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/cervejas/session ipa sombra da pedra.jpeg">session ipa sombra da pedra</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_cervejas_session_ipa_sombra_da_p" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_cervejas_session_ipa_sombra_da_p')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_cervejas_session_ipa_sombra_da_p','imagens/cervejas/session ipa sombra da pedra.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_cervejas_session_ipa_sombra_da_p')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_cervejas_session_ipa_sombra_da_p',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_cervejas_session_ipa_sombra_da_p" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_cervejas_session_ipa_sombra_da_p" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_cervejas_session_ipa_sombra_da_p')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_cervejas_pilsen_cristal_da_serra" src="imagens/cervejas/pilsen cristal da serra.jpeg" alt="pilsen cristal da serra" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/cervejas/pilsen cristal da serra.jpeg">pilsen cristal da serra</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_cervejas_pilsen_cristal_da_serra" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_cervejas_pilsen_cristal_da_serra')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_cervejas_pilsen_cristal_da_serra','imagens/cervejas/pilsen cristal da serra.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_cervejas_pilsen_cristal_da_serra')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_cervejas_pilsen_cristal_da_serra',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_cervejas_pilsen_cristal_da_serra" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_cervejas_pilsen_cristal_da_serra" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_cervejas_pilsen_cristal_da_serra')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_cervejas_hidromel_valhala_jpeg" src="imagens/cervejas/hidromel valhala.jpeg" alt="hidromel valhala" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/cervejas/hidromel valhala.jpeg">hidromel valhala</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_cervejas_hidromel_valhala_jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_cervejas_hidromel_valhala_jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_cervejas_hidromel_valhala_jpeg','imagens/cervejas/hidromel valhala.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_cervejas_hidromel_valhala_jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_cervejas_hidromel_valhala_jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_cervejas_hidromel_valhala_jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_cervejas_hidromel_valhala_jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_cervejas_hidromel_valhala_jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_cervejas_italian_grape_ale_autol" src="imagens/cervejas/italian grape ale autolise.jpeg" alt="italian grape ale autolise" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/cervejas/italian grape ale autolise.jpeg">italian grape ale autolise</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_cervejas_italian_grape_ale_autol" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_cervejas_italian_grape_ale_autol')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_cervejas_italian_grape_ale_autol','imagens/cervejas/italian grape ale autolise.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_cervejas_italian_grape_ale_autol')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_cervejas_italian_grape_ale_autol',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_cervejas_italian_grape_ale_autol" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_cervejas_italian_grape_ale_autol" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_cervejas_italian_grape_ale_autol')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_loja_abridor_de_garrafa_15_00_jp" src="imagens/Loja/abridor de garrafa 15,00.jpeg" alt="abridor de garrafa 15,00" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/Loja/abridor de garrafa 15,00.jpeg">abridor de garrafa 15,00</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_loja_abridor_de_garrafa_15_00_jp" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_loja_abridor_de_garrafa_15_00_jp')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_loja_abridor_de_garrafa_15_00_jp','imagens/Loja/abridor de garrafa 15,00.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_loja_abridor_de_garrafa_15_00_jp')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_loja_abridor_de_garrafa_15_00_jp',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_loja_abridor_de_garrafa_15_00_jp" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_loja_abridor_de_garrafa_15_00_jp" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_loja_abridor_de_garrafa_15_00_jp')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_loja_chaveiro_barril_20_00_jpeg" src="imagens/Loja/Chaveiro Barril 20,00.jpeg" alt="Chaveiro Barril 20,00" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/Loja/Chaveiro Barril 20,00.jpeg">Chaveiro Barril 20,00</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_loja_chaveiro_barril_20_00_jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_loja_chaveiro_barril_20_00_jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_loja_chaveiro_barril_20_00_jpeg','imagens/Loja/Chaveiro Barril 20,00.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_loja_chaveiro_barril_20_00_jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_loja_chaveiro_barril_20_00_jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_loja_chaveiro_barril_20_00_jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_loja_chaveiro_barril_20_00_jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_loja_chaveiro_barril_20_00_jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_loja_bon___10__jpg" src="imagens/Loja/Boné (10).jpg" alt="Boné (10)" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/Loja/Boné (10).jpg">Boné (10)</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_loja_bon___10__jpg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_loja_bon___10__jpg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_loja_bon___10__jpg','imagens/Loja/Boné (10).jpg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_loja_bon___10__jpg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_loja_bon___10__jpg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_loja_bon___10__jpg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_loja_bon___10__jpg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_loja_bon___10__jpg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_loja_chapeu_chaveiro__2__jpeg" src="imagens/Loja/chapeu chaveiro (2).jpeg" alt="chapeu chaveiro (2)" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/Loja/chapeu chaveiro (2).jpeg">chapeu chaveiro (2)</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_loja_chapeu_chaveiro__2__jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_loja_chapeu_chaveiro__2__jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_loja_chapeu_chaveiro__2__jpeg','imagens/Loja/chapeu chaveiro (2).jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_loja_chapeu_chaveiro__2__jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_loja_chapeu_chaveiro__2__jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_loja_chapeu_chaveiro__2__jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_loja_chapeu_chaveiro__2__jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_loja_chapeu_chaveiro__2__jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_loja_camisetas_80_00__1__jpeg" src="imagens/Loja/Camisetas 80,00 (1).jpeg" alt="Camisetas 80,00 (1)" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/Loja/Camisetas 80,00 (1).jpeg">Camisetas 80,00 (1)</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_loja_camisetas_80_00__1__jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_loja_camisetas_80_00__1__jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_loja_camisetas_80_00__1__jpeg','imagens/Loja/Camisetas 80,00 (1).jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_loja_camisetas_80_00__1__jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_loja_camisetas_80_00__1__jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_loja_camisetas_80_00__1__jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_loja_camisetas_80_00__1__jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_loja_camisetas_80_00__1__jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_loja_camisetas_80_00__2__jpeg" src="imagens/Loja/Camisetas 80,00 (2).jpeg" alt="Camisetas 80,00 (2)" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/Loja/Camisetas 80,00 (2).jpeg">Camisetas 80,00 (2)</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_loja_camisetas_80_00__2__jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_loja_camisetas_80_00__2__jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_loja_camisetas_80_00__2__jpeg','imagens/Loja/Camisetas 80,00 (2).jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_loja_camisetas_80_00__2__jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_loja_camisetas_80_00__2__jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_loja_camisetas_80_00__2__jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_loja_camisetas_80_00__2__jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_loja_camisetas_80_00__2__jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_loja_camisetas_80_00__4__jpeg" src="imagens/Loja/Camisetas 80,00 (4).jpeg" alt="Camisetas 80,00 (4)" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/Loja/Camisetas 80,00 (4).jpeg">Camisetas 80,00 (4)</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_loja_camisetas_80_00__4__jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_loja_camisetas_80_00__4__jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_loja_camisetas_80_00__4__jpeg','imagens/Loja/Camisetas 80,00 (4).jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_loja_camisetas_80_00__4__jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_loja_camisetas_80_00__4__jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_loja_camisetas_80_00__4__jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_loja_camisetas_80_00__4__jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_loja_camisetas_80_00__4__jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_loja_camisetas_80_00__5__jpeg" src="imagens/Loja/Camisetas 80,00 (5).jpeg" alt="Camisetas 80,00 (5)" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/Loja/Camisetas 80,00 (5).jpeg">Camisetas 80,00 (5)</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_loja_camisetas_80_00__5__jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_loja_camisetas_80_00__5__jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_loja_camisetas_80_00__5__jpeg','imagens/Loja/Camisetas 80,00 (5).jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_loja_camisetas_80_00__5__jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_loja_camisetas_80_00__5__jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_loja_camisetas_80_00__5__jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_loja_camisetas_80_00__5__jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_loja_camisetas_80_00__5__jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_loja_camisetas_80_00__6__jpeg" src="imagens/Loja/Camisetas 80,00 (6).jpeg" alt="Camisetas 80,00 (6)" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/Loja/Camisetas 80,00 (6).jpeg">Camisetas 80,00 (6)</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_loja_camisetas_80_00__6__jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_loja_camisetas_80_00__6__jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_loja_camisetas_80_00__6__jpeg','imagens/Loja/Camisetas 80,00 (6).jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_loja_camisetas_80_00__6__jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_loja_camisetas_80_00__6__jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_loja_camisetas_80_00__6__jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_loja_camisetas_80_00__6__jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_loja_camisetas_80_00__6__jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_loja_camisetas_80_00__7__jpeg" src="imagens/Loja/Camisetas 80,00 (7).jpeg" alt="Camisetas 80,00 (7)" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/Loja/Camisetas 80,00 (7).jpeg">Camisetas 80,00 (7)</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_loja_camisetas_80_00__7__jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_loja_camisetas_80_00__7__jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_loja_camisetas_80_00__7__jpeg','imagens/Loja/Camisetas 80,00 (7).jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_loja_camisetas_80_00__7__jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_loja_camisetas_80_00__7__jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_loja_camisetas_80_00__7__jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_loja_camisetas_80_00__7__jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_loja_camisetas_80_00__7__jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_loja_camisetas_80_00__8__jpeg" src="imagens/Loja/Camisetas 80,00 (8).jpeg" alt="Camisetas 80,00 (8)" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/Loja/Camisetas 80,00 (8).jpeg">Camisetas 80,00 (8)</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_loja_camisetas_80_00__8__jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_loja_camisetas_80_00__8__jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_loja_camisetas_80_00__8__jpeg','imagens/Loja/Camisetas 80,00 (8).jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_loja_camisetas_80_00__8__jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_loja_camisetas_80_00__8__jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_loja_camisetas_80_00__8__jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_loja_camisetas_80_00__8__jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_loja_camisetas_80_00__8__jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_loja_caneca_340ml_45_00_jpeg" src="imagens/Loja/caneca 340ml 45,00.jpeg" alt="caneca 340ml 45,00" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/Loja/caneca 340ml 45,00.jpeg">caneca 340ml 45,00</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_loja_caneca_340ml_45_00_jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_loja_caneca_340ml_45_00_jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_loja_caneca_340ml_45_00_jpeg','imagens/Loja/caneca 340ml 45,00.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_loja_caneca_340ml_45_00_jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_loja_caneca_340ml_45_00_jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_loja_caneca_340ml_45_00_jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_loja_caneca_340ml_45_00_jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_loja_caneca_340ml_45_00_jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_loja_copo_caldereta_30_00__1__jp" src="imagens/Loja/copo caldereta 30,00 (1).jpeg" alt="copo caldereta 30,00 (1)" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/Loja/copo caldereta 30,00 (1).jpeg">copo caldereta 30,00 (1)</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_loja_copo_caldereta_30_00__1__jp" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_loja_copo_caldereta_30_00__1__jp')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_loja_copo_caldereta_30_00__1__jp','imagens/Loja/copo caldereta 30,00 (1).jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_loja_copo_caldereta_30_00__1__jp')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_loja_copo_caldereta_30_00__1__jp',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_loja_copo_caldereta_30_00__1__jp" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_loja_copo_caldereta_30_00__1__jp" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_loja_copo_caldereta_30_00__1__jp')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+                <div style="height:130px;overflow:hidden;position:relative;background:#0a0a0a;">
+                  <img id="fimgpreview_fimg_imagens_loja_copo_stout_500ml_35_00_jpeg" src="imagens/Loja/copo stout 500ml 35,00.jpeg" alt="copo stout 500ml 35,00" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.opacity=0.2">
+                </div>
+                <div style="padding:12px;">
+                  <p style="font-size:0.75rem;color:#888;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="imagens/Loja/copo stout 500ml 35,00.jpeg">copo stout 500ml 35,00</p>
+                  <div style="display:flex;gap:6px;flex-direction:column;">
+                    <input type="text" id="fimginput_fimg_imagens_loja_copo_stout_500ml_35_00_jpeg" placeholder="URL ou link Drive" value="" style="width:100%;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.75rem;outline:none;font-family:Montserrat,sans-serif;" oninput="previewFimgLive('fimg_imagens_loja_copo_stout_500ml_35_00_jpeg')">
+                    <div style="display:flex;gap:6px;">
+                      <button type="button" class="btn-admin" style="flex:1;margin:0;padding:7px;font-size:0.72rem;" onclick="salvarFimg('fimg_imagens_loja_copo_stout_500ml_35_00_jpeg','imagens/Loja/copo stout 500ml 35,00.jpeg')">💾 Salvar</button>
+                      <button type="button" class="btn-admin secundario" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="abrirConvFimg('fimg_imagens_loja_copo_stout_500ml_35_00_jpeg')">📁</button>
+                      <label style="margin:0;padding:7px 10px;border:1px solid #444;border-radius:8px;color:#888;font-size:0.72rem;cursor:pointer;background:transparent;transition:all 0.2s;" onmouseover="this.style.borderColor='#c9a24d';this.style.color='#c9a24d'" onmouseout="this.style.borderColor='#444';this.style.color='#888'">
+                        📱<input type="file" accept="image/*" style="display:none" onchange="handleFimgUpload('fimg_imagens_loja_copo_stout_500ml_35_00_jpeg',this)">
+                      </label>
+                    </div>
+                    <div id="fimgconv_fimg_imagens_loja_copo_stout_500ml_35_00_jpeg" style="display:none;">
+                      <div style="display:flex;gap:6px;margin-top:4px;">
+                        <input type="text" id="fimgdrive_fimg_imagens_loja_copo_stout_500ml_35_00_jpeg" placeholder="Cole link do Drive" style="flex:1;padding:7px 10px;border:1px solid #333;border-radius:7px;background:#222;color:#ddd;font-size:0.73rem;outline:none;font-family:Montserrat,sans-serif;">
+                        <button type="button" class="btn-admin" style="margin:0;padding:7px 10px;font-size:0.72rem;" onclick="converterFimgDrive('fimg_imagens_loja_copo_stout_500ml_35_00_jpeg')">✓</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -441,9 +1531,9 @@ em concursos nacionais, nosso espaço foi criado para receber, brindar e aprovei
 <section class="galeria">
   <h2>Nosso Espaço</h2>
   <div class="fotos">
-    <img src="imagens/espaco4.jpeg" alt="Cervejaria">
-    <img src="imagens/espaco/8torneiras.jpg" alt="Chopp">
-    <img src="imagens/espaco/espaco2 - Copia.jpeg" alt="Ambiente">
+    <img data-imgid="fimg_imagens_espaco4_jpeg" src="imagens/espaco4.jpeg" alt="Cervejaria">
+    <img data-imgid="fimg_imagens_espaco_8torneiras_jpg" src="imagens/espaco/8torneiras.jpg" alt="Chopp">
+    <img data-imgid="fimg_imagens_espaco_espaco2___copia_jpeg" src="imagens/espaco/espaco2 - Copia.jpeg" alt="Ambiente">
   </div>
 </section>
 
@@ -464,27 +1554,27 @@ em concursos nacionais, nosso espaço foi criado para receber, brindar e aprovei
 <section class="eventos-galeria" id="pub-eventos-grid">
   <!-- Eventos padrão (usados se não houver dados do admin) -->
   <div class="evento-card">
-    <img src="imagens/evento1.JPG" alt="Música ao vivo">
+    <img data-imgid="fimg_imagens_evento1_jpg" src="imagens/evento1.JPG" alt="Música ao vivo">
     <div class="evento-info"><h3>Petiscos</h3><p>Os Mais Deliciosos Lanches.</p><br><a href="https://wa.me/5512997410925" class="btn">Venha Conhecer!</a></div>
   </div>
   <div class="evento-card">
-    <img src="imagens/Marionetedechopp (1).jpeg" alt="Jogos e brincadeiras">
+    <img data-imgid="fimg_imagens_marionetedechopp__1__jpeg" src="imagens/Marionetedechopp (1).jpeg" alt="Jogos e brincadeiras">
     <div class="evento-info"><h3>Jogos & Brincadeiras</h3><p>Jogos e desafios. Quer Agendar?</p><br><a href="https://wa.me/5512997410925" class="btn">Falar no WhatsApp</a></div>
   </div>
   <div class="evento-card">
-    <img src="imagens/pessoas/pessoa5.jpeg" alt="Eventos especiais">
+    <img data-imgid="fimg_imagens_pessoas_pessoa5_jpeg" src="imagens/pessoas/pessoa5.jpeg" alt="Eventos especiais">
     <div class="evento-info"><h3>Eventos Temáticos</h3><p> Datas Comemorativas!</p><br><a href="https://wa.me/5512997410925" class="btn">Falar no WhatsApp</a></div>
   </div>
   <div class="evento-card">
-    <img src="imagens/cervejas/garrafas 30,00.jpeg" alt="Cervejas">
+    <img data-imgid="fimg_imagens_cervejas_garrafas_30_00_jpeg" src="imagens/cervejas/garrafas 30,00.jpeg" alt="Cervejas">
     <div class="evento-info"><h3>As melhores Cervejas</h3><p>Comemore com cervejas especiais!</p><br><a href="loja.html" class="btn">Ver Loja</a></div>
   </div>
   <div class="evento-card">
-    <img src="imagens/Loja/Camisetas 80,00 (2).jpeg" alt="Loja">
+    <img data-imgid="fimg_imagens_loja_camisetas_80_00__2__jpeg" src="imagens/Loja/Camisetas 80,00 (2).jpeg" alt="Loja">
     <div class="evento-info"><h3>Itens Temáticos</h3><p>Produtos da Nossa Loja.</p><br><a href="loja.html" class="btn">Ver Loja</a></div>
   </div>
   <div class="evento-card">
-    <img src="imagens/Loja/copo stout 500ml 35,00.jpeg" alt="Grupo">
+    <img data-imgid="fimg_imagens_loja_copo_stout_500ml_35_00_jpeg" src="imagens/Loja/copo stout 500ml 35,00.jpeg" alt="Grupo">
     <div class="evento-info"><h3>Quer agendar para grupo?</h3><p>Clima descontraído ao pôr do sol.</p><br><a href="https://wa.me/5512997410925" class="btn">Agende no WhatsApp</a></div>
   </div>
 </section>
@@ -493,7 +1583,7 @@ em concursos nacionais, nosso espaço foi criado para receber, brindar e aprovei
   <article class="cerveja-card">
     <div class="cerveja-imagem">
       <span class="selo-medalha ouro">Ouro 2025</span>
-      <img src="imagens/cervejas/blond-ale.jpeg" alt="Cerveja Dù Baú blond ale" class="imagem-cerveja">
+      <img data-imgid="fimg_imagens_cervejas_blond_ale_jpeg" src="imagens/cervejas/blond-ale.jpeg" alt="Cerveja Dù Baú blond ale" class="imagem-cerveja">
     </div>
     <section class="eventos-header">
       <h2><span>Destaque para uma de nossas Premiadas</span><small>Venha Provar!</small></h2>
@@ -639,7 +1729,7 @@ function salvarProduto() {
     nome, preco,
     sub: document.getElementById('prod-sub').value.trim(),
     cat: document.getElementById('prod-cat').value,
-    img: document.getElementById('prod-img').value.trim(),
+    img: getWidgetValue('prod-img'),
     btn: document.getElementById('prod-btn').value.trim() || 'Pedir no WhatsApp'
   };
   if (editId) {
@@ -656,10 +1746,11 @@ function salvarProduto() {
 }
 
 function limparFormProduto() {
-  ['prod-edit-id','prod-nome','prod-preco','prod-sub','prod-img','prod-btn'].forEach(id => {
+  ['prod-edit-id','prod-nome','prod-preco','prod-sub','prod-btn'].forEach(id => {
     document.getElementById(id).value = '';
   });
   document.getElementById('prod-cat').value = 'cervejas';
+  removerFimg('prod-img');
 }
 
 function editarProduto(id) {
@@ -670,7 +1761,7 @@ function editarProduto(id) {
   document.getElementById('prod-preco').value = p.preco;
   document.getElementById('prod-sub').value = p.sub || '';
   document.getElementById('prod-cat').value = p.cat || 'cervejas';
-  document.getElementById('prod-img').value = p.img || '';
+  preencherWidget('prod-img', p.img || '');
   document.getElementById('prod-btn').value = p.btn || '';
   adminNav('produtos', null);
   document.querySelector('.admin-form h3').textContent = '✏️ Editando Produto';
@@ -701,7 +1792,7 @@ function salvarCerveja() {
     cor: document.getElementById('cerv-cor').value.trim(),
     medalha: document.getElementById('cerv-medalha').value,
     desc: document.getElementById('cerv-desc').value.trim(),
-    img: document.getElementById('cerv-img').value.trim(),
+    img: getWidgetValue('cerv-img'),
     premio: document.getElementById('cerv-premio').value.trim()
   };
   if (editId) {
@@ -718,10 +1809,11 @@ function salvarCerveja() {
 }
 
 function limparFormCerveja() {
-  ['cerv-edit-id','cerv-nome','cerv-estilo','cerv-ibu','cerv-alc','cerv-cor','cerv-desc','cerv-img','cerv-premio'].forEach(id => {
+  ['cerv-edit-id','cerv-nome','cerv-estilo','cerv-ibu','cerv-alc','cerv-cor','cerv-desc','cerv-premio'].forEach(id => {
     document.getElementById(id).value = '';
   });
   document.getElementById('cerv-medalha').value = '';
+  removerFimg('cerv-img');
 }
 
 function editarCerveja(id) {
@@ -735,7 +1827,7 @@ function editarCerveja(id) {
   document.getElementById('cerv-cor').value = c.cor || '';
   document.getElementById('cerv-medalha').value = c.medalha || '';
   document.getElementById('cerv-desc').value = c.desc || '';
-  document.getElementById('cerv-img').value = c.img || '';
+  preencherWidget('cerv-img', c.img || '');
   document.getElementById('cerv-premio').value = c.premio || '';
   adminNav('cervejas', null);
 }
@@ -759,7 +1851,7 @@ function salvarEvento() {
   const obj = {
     id: editId || Date.now().toString(),
     titulo,
-    img: document.getElementById('ev-img').value.trim(),
+    img: getWidgetValue('ev-img'),
     desc: document.getElementById('ev-desc').value.trim(),
     link: document.getElementById('ev-link').value.trim() || 'https://wa.me/5512997410925',
     btn: document.getElementById('ev-btn').value.trim() || 'Falar no WhatsApp'
@@ -779,9 +1871,10 @@ function salvarEvento() {
 }
 
 function limparFormEvento() {
-  ['ev-edit-id','ev-titulo','ev-img','ev-desc','ev-link','ev-btn'].forEach(id => {
+  ['ev-edit-id','ev-titulo','ev-desc','ev-link','ev-btn'].forEach(id => {
     document.getElementById(id).value = '';
   });
+  removerFimg('ev-img');
 }
 
 function editarEvento(id) {
@@ -789,7 +1882,7 @@ function editarEvento(id) {
   if (!ev) return;
   document.getElementById('ev-edit-id').value = ev.id;
   document.getElementById('ev-titulo').value = ev.titulo;
-  document.getElementById('ev-img').value = ev.img || '';
+  preencherWidget('ev-img', ev.img || '');
   document.getElementById('ev-desc').value = ev.desc || '';
   document.getElementById('ev-link').value = ev.link || '';
   document.getElementById('ev-btn').value = ev.btn || '';
@@ -874,8 +1967,8 @@ function carregarCamposConteudo() {
   set('cb-info2t', c.info2t); set('cb-info2p', c.info2p);
   set('cb-info3t', c.info3t); set('cb-info3p', c.info3p);
   set('cb-footer', c.footer);
-  set('cb-video-src', c.videoSrc);
-  set('cb-video-poster', c.videoPoster);
+  if (c.videoSrc) preencherWidget('cb-video-src', c.videoSrc.startsWith('data:') ? 'Vídeo carregado' : c.videoSrc.split('/').pop());
+  if (c.videoPoster) preencherWidget('cb-video-poster', c.videoPoster);
 }
 
 function salvarConteudo(bloco) {
@@ -895,8 +1988,8 @@ function salvarConteudo(bloco) {
   } else if (bloco === 'footer') {
     c.footer = gv('cb-footer');
   } else if (bloco === 'video') {
-    c.videoSrc    = gv('cb-video-src');
-    c.videoPoster = gv('cb-video-poster');
+    c.videoSrc    = getWidgetValue('cb-video-src') || gv('cb-video-src');
+    c.videoPoster = getWidgetValue('cb-video-poster') || gv('cb-video-poster');
   }
   setConteudo(c);
   aplicarConteudoPublico(c);
@@ -949,6 +2042,94 @@ function renderEventosPub() {
 
 
 
+
+
+
+/* ——— IMG WIDGET SIMPLES ——— */
+
+function toggleDriveInput(fieldId) {
+  const box = document.getElementById('drive-box-' + fieldId);
+  const btn = document.querySelector('#widget-' + fieldId + ' .img-btn-drive');
+  const aberto = box.style.display !== 'none';
+  box.style.display = aberto ? 'none' : 'block';
+  btn.classList.toggle('ativo', !aberto);
+}
+
+function converterEAplicarDrive(fieldId) {
+  const raw   = document.getElementById('drive-raw-' + fieldId).value.trim();
+  const erro  = document.getElementById('drive-erro-' + fieldId);
+  erro.style.display = 'none';
+
+  let id = '';
+  const m1 = raw.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  const m2 = raw.match(/id=([a-zA-Z0-9_-]+)/);
+  if (m1) id = m1[1]; else if (m2) id = m2[1];
+
+  if (!id) { erro.style.display = 'block'; return; }
+
+  const url = 'https://drive.google.com/uc?export=view&id=' + id;
+  aplicarImgNoWidget(fieldId, url, 'Google Drive');
+  document.getElementById('drive-box-' + fieldId).style.display = 'none';
+  document.querySelector('#widget-' + fieldId + ' .img-btn-drive').classList.remove('ativo');
+  document.getElementById('drive-raw-' + fieldId).value = '';
+}
+
+function handleCelularUpload(fieldId, inputEl) {
+  const file = inputEl.files[0];
+  if (!file) return;
+  if (file.size > 4 * 1024 * 1024) {
+    alert('Imagem muito grande (máx 4MB). Tente uma foto menor ou use o Google Drive.');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    aplicarImgNoWidget(fieldId, e.target.result, file.name);
+  };
+  reader.readAsDataURL(file);
+}
+
+function aplicarImgNoWidget(fieldId, url, nome) {
+  // Salva no campo hidden
+  const hidden = document.getElementById(fieldId);
+  if (hidden) hidden.value = url;
+
+  // Mostra preview
+  const prevBox = document.getElementById('prev-box-' + fieldId);
+  const prevImg = document.getElementById('prev-img-' + fieldId);
+  const prevNome = document.getElementById('prev-nome-' + fieldId);
+
+  if (prevBox && prevImg) {
+    prevImg.src = url;
+    prevImg.onload = () => { prevBox.style.display = 'flex'; };
+    prevImg.onerror = () => { prevBox.style.display = 'none'; };
+    if (prevNome) prevNome.textContent = nome.length > 40 ? nome.slice(0,40)+'...' : nome;
+  }
+}
+
+function removerFimg(fieldId) {
+  const hidden = document.getElementById(fieldId);
+  if (hidden) hidden.value = '';
+  const prevBox = document.getElementById('prev-box-' + fieldId);
+  if (prevBox) prevBox.style.display = 'none';
+  const prevImg = document.getElementById('prev-img-' + fieldId);
+  if (prevImg) prevImg.src = '';
+}
+
+// Adapta salvarProduto/salvarCerveja/salvarEvento para ler do campo hidden do widget
+function getWidgetValue(fieldId) {
+  const hidden = document.getElementById(fieldId);
+  if (hidden && hidden.value) return hidden.value;
+  // fallback: campo texto direto (caso antigo)
+  const txt = document.getElementById(fieldId + '-display');
+  return txt ? txt.value : '';
+}
+
+// Preenche o widget ao editar um item existente
+function preencherWidget(fieldId, url, nomeForced) {
+  if (!url) return;
+  const nome = nomeForced || (url.startsWith('data:') ? 'Imagem carregada' : url.split('/').pop());
+  aplicarImgNoWidget(fieldId, url, nome);
+}
 
 /* ——— IMPORTAR EVENTOS ORIGINAIS ——— */
 function importarEventosOriginais() {
@@ -1171,10 +2352,91 @@ function importarProdutosOriginais() {
   setTimeout(() => { ok.style.display = 'none'; }, 4000);
 }
 
+
+/* ——— IMAGENS FIXAS DO SITE ——— */
+const FIMG_MAP = {"fimg_imagens_espaco4_jpeg": "imagens/espaco4.jpeg", "fimg_imagens_espaco_8torneiras_jpg": "imagens/espaco/8torneiras.jpg", "fimg_imagens_espaco_espaco2___copia_jpeg": "imagens/espaco/espaco2 - Copia.jpeg", "fimg_imagens_evento1_jpg": "imagens/evento1.JPG", "fimg_imagens_marionetedechopp__1__jpeg": "imagens/Marionetedechopp (1).jpeg", "fimg_imagens_pessoas_pessoa5_jpeg": "imagens/pessoas/pessoa5.jpeg", "fimg_imagens_cervejas_garrafas_30_00_jpeg": "imagens/cervejas/garrafas 30,00.jpeg", "fimg_imagens_loja_camisetas_80_00__2__jpeg": "imagens/Loja/Camisetas 80,00 (2).jpeg", "fimg_imagens_loja_copo_stout_500ml_35_00_jpeg": "imagens/Loja/copo stout 500ml 35,00.jpeg", "fimg_imagens_cervejas_blond_ale_jpeg": "imagens/cervejas/blond-ale.jpeg", "fimg_imagens_cervejas_chardonnay1__1__jpeg": "imagens/cervejas/chardonnay1 (1).jpeg", "fimg_imagens_cervejas_red_ale_jpeg": "imagens/cervejas/Red Ale.jpeg", "fimg_imagens_cervejas_weiss_brisa_da_mantique": "imagens/cervejas/weiss brisa da mantiqueira.jpeg", "fimg_imagens_cervejas_pilsen_cristal_da_serra": "imagens/cervejas/pilsen cristal da serra.jpeg", "fimg_imagens_cervejas_session_ipa_sombra_da_p": "imagens/cervejas/session ipa sombra da pedra.jpeg", "fimg_imagens_cervejas_italian_grape_ale_autol": "imagens/cervejas/italian grape ale autolise.jpeg", "fimg_imagens_cervejas_hidromel_valhala_jpeg": "imagens/cervejas/hidromel valhala.jpeg", "fimg_imagens_cervejas_american_ipa_vale_dos_v": "imagens/cervejas/american ipa vale dos ventos.jpeg", "fimg_imagens_loja_abridor_de_garrafa_15_00_jp": "imagens/Loja/abridor de garrafa 15,00.jpeg", "fimg_imagens_loja_chaveiro_barril_20_00_jpeg": "imagens/Loja/Chaveiro Barril 20,00.jpeg", "fimg_imagens_loja_bon___10__jpg": "imagens/Loja/Bon\u00e9 (10).jpg", "fimg_imagens_loja_chapeu_chaveiro__2__jpeg": "imagens/Loja/chapeu chaveiro (2).jpeg", "fimg_imagens_loja_camisetas_80_00__1__jpeg": "imagens/Loja/Camisetas 80,00 (1).jpeg", "fimg_imagens_loja_camisetas_80_00__4__jpeg": "imagens/Loja/Camisetas 80,00 (4).jpeg", "fimg_imagens_loja_camisetas_80_00__5__jpeg": "imagens/Loja/Camisetas 80,00 (5).jpeg", "fimg_imagens_loja_camisetas_80_00__6__jpeg": "imagens/Loja/Camisetas 80,00 (6).jpeg", "fimg_imagens_loja_camisetas_80_00__7__jpeg": "imagens/Loja/Camisetas 80,00 (7).jpeg", "fimg_imagens_loja_camisetas_80_00__8__jpeg": "imagens/Loja/Camisetas 80,00 (8).jpeg", "fimg_imagens_loja_caneca_340ml_45_00_jpeg": "imagens/Loja/caneca 340ml 45,00.jpeg", "fimg_imagens_loja_copo_caldereta_30_00__1__jp": "imagens/Loja/copo caldereta 30,00 (1).jpeg"};
+
+function getImgOverrides() {
+  return JSON.parse(localStorage.getItem('dubau_fimgs') || '{}');
+}
+function setImgOverrides(obj) {
+  localStorage.setItem('dubau_fimgs', JSON.stringify(obj));
+}
+
+function salvarFimg(imgId, originalSrc) {
+  const val = document.getElementById('fimginput_' + imgId).value.trim();
+  if (!val) { alert('Cole uma URL ou envie uma imagem primeiro.'); return; }
+  const overrides = getImgOverrides();
+  overrides[imgId] = val;
+  setImgOverrides(overrides);
+  // Atualiza imagem na página imediatamente
+  aplicarImgOverrides();
+  // Feedback
+  const btn = document.querySelector('#fimgpreview_' + imgId)?.closest('div')?.querySelector('.btn-admin');
+  if (btn) { const orig = btn.textContent; btn.textContent = '✓ Salvo!'; setTimeout(()=>{btn.textContent=orig;},2000); }
+}
+
+function previewFimgLive(imgId) {
+  const val = document.getElementById('fimginput_' + imgId)?.value.trim();
+  if (!val) return;
+  const img = document.getElementById('fimgpreview_' + imgId);
+  if (img) { img.src = val; img.style.opacity = '1'; }
+}
+
+function abrirConvFimg(imgId) {
+  const box = document.getElementById('fimgconv_' + imgId);
+  if (box) box.style.display = box.style.display === 'none' ? 'block' : 'none';
+}
+
+function converterFimgDrive(imgId) {
+  const input = document.getElementById('fimgdrive_' + imgId);
+  const url = input.value.trim();
+  let id = '';
+  const m1 = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  const m2 = url.match(/id=([a-zA-Z0-9_-]+)/);
+  if (m1) id = m1[1]; else if (m2) id = m2[1];
+  if (!id) { alert('Link inválido.'); return; }
+  const link = 'https://drive.google.com/uc?export=view&id=' + id;
+  document.getElementById('fimginput_' + imgId).value = link;
+  document.getElementById('fimgconv_' + imgId).style.display = 'none';
+  previewFimgLive(imgId);
+}
+
+function handleFimgUpload(imgId, inputEl) {
+  const file = inputEl.files[0];
+  if (!file) return;
+  if (file.size > 3 * 1024 * 1024) { alert('Imagem maior que 3MB. Use uma imagem menor ou o Google Drive.'); return; }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const base64 = e.target.result;
+    document.getElementById('fimginput_' + imgId).value = base64;
+    previewFimgLive(imgId);
+  };
+  reader.readAsDataURL(file);
+}
+
+function aplicarImgOverrides() {
+  const overrides = getImgOverrides();
+  document.querySelectorAll('img[data-imgid]').forEach(img => {
+    const id = img.dataset.imgid;
+    if (overrides[id]) {
+      img.src = overrides[id];
+    }
+  });
+  // Preenche inputs do painel com valores salvos
+  Object.keys(overrides).forEach(id => {
+    const input = document.getElementById('fimginput_' + id);
+    if (input && !input.value) input.value = overrides[id];
+    const prev = document.getElementById('fimgpreview_' + id);
+    if (prev) prev.src = overrides[id];
+  });
+}
+
 /* ——— INICIALIZAÇÃO ——— */
 (function init() {
   aplicarConteudoPublico(getConteudo());
   renderEventosPub();
+  aplicarImgOverrides();
 })();
 </script>
 
